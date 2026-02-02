@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Features from './pages/Features';
 import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import Media from './pages/Media';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/features" element={<Features />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:date" element={<BlogPost />} />
           <Route path="/media" element={<Media />} />
         </Routes>
         <Footer />
