@@ -98,7 +98,20 @@ function BlogPost() {
             <span>{formatDate(post.date)}</span>
           </div>
           <div className="bg-black/70 backdrop-blur-sm p-8 rounded-lg prose prose-invert prose-lg max-w-none">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                img: ({ src, alt, ...props }) => {
+                  // Transform relative image paths to absolute paths
+                  let imageSrc = src;
+                  if (src && src.startsWith('./imgs/')) {
+                    imageSrc = `/data/blog-page/${date}/imgs/${src.substring(7)}`;
+                  }
+                  return <img src={imageSrc} alt={alt} {...props} className="rounded-lg max-w-full h-auto" />;
+                },
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
           </div>
         </div>
       </div>
