@@ -10,7 +10,7 @@ This is *our first* **blog** ~~post~~ `about` the exciting features coming to Fe
 
 Stay tuned for more updates!
 
-look at this picture:
+* look at this [picture](./imgs/thumbnail.jpg):
 
 ![Pic](./imgs/thumbnail.jpg)
 
