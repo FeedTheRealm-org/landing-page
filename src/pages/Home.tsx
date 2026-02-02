@@ -73,7 +73,10 @@ function Home() {
       <section className="relative min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${backgroundUpper})` }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
         <div className="relative text-center z-10 px-4">
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-white">Feed the Realm</h2>
+          <div className="flex justify-center items-center mb-4">
+            <img src="/logo.jpg" alt="Feed the Realm Logo" className="h-16 w-16 md:h-20 md:w-20 mr-4" />
+            <h2 className="text-4xl md:text-6xl font-bold text-white">Feed the Realm</h2>
+          </div>
           <p className="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">The ultimate MMO experience with world creation tools</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Player</button>
