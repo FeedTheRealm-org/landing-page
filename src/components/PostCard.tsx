@@ -12,6 +12,12 @@ interface PostCardProps {
 }
 
 function PostCard({ post, className = '' }: PostCardProps) {
+  // Format date manually to avoid timezone issues
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split('-');
+    return `${parseInt(month)}/${parseInt(day)}/${year}`;
+  };
+
   return (
     <Link
       to={`/blog/${post.folder.split('/').pop()}`}
@@ -26,7 +32,7 @@ function PostCard({ post, className = '' }: PostCardProps) {
       )}
       <h4 className="text-lg md:text-xl font-bold mb-2">{post.title}</h4>
       <p className="text-sm text-gray-300 mb-1">By {post.author}</p>
-      <p className="text-sm text-gray-400">{new Date(post.date).toLocaleDateString()}</p>
+      <p className="text-sm text-gray-400">{formatDate(post.date)}</p>
     </Link>
   );
 }
