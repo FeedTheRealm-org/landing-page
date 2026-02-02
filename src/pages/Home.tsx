@@ -13,7 +13,7 @@ function Home() {
   useEffect(() => {
     // Load posts
     const loadPosts = async () => {
-      const postModules = import.meta.glob('/data/posts-page/**/*.md', { query: '?raw', import: 'default' });
+      const postModules = import.meta.glob('/data/blog-page/**/*.md', { query: '?raw', import: 'default' });
       const postList = [];
       for (const path in postModules) {
         const content = await postModules[path]();
@@ -42,6 +42,16 @@ function Home() {
       }
       setImages(imageList.slice(0, 3)); // Latest 3
     };
+
+    // Load background image
+    // const loadBackground = async () => {
+    //   try {
+    //     const bgModule = await import('/data/home-page/background.jpg?url');
+    //     setBackground(bgModule.default);
+    //   } catch (e) {
+    //     // Background not found, use default
+    //   }
+    // };
 
     // Load background images
     const loadBackgrounds = async () => {

@@ -4,6 +4,7 @@ import yaml from 'js-yaml';
 function Media() {
   const [videos, setVideos] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
+  const [background, setBackground] = useState<string>('');
 
   useEffect(() => {
     const loadVideos = async () => {
@@ -22,22 +23,29 @@ function Media() {
       setImages(imageList);
     };
 
+    const loadBackground = async () => {
+      const bgModule = await import('/data/media-page/background.jpg?url');
+      setBackground(bgModule.default);
+    };
+
     loadVideos();
     loadImages();
+    loadBackground();
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white py-20">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-cover bg-center relative" style={{ backgroundImage: `url(${background})` }}>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
+      <div className="container mx-auto px-4 py-20 relative z-10 text-white">
         <h1 className="text-3xl md:text-5xl font-bold text-center mb-12">Media</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {videos.map((video, index) => (
-            <div key={index} className="aspect-video">
-              <iframe src={`https://www.youtube.com/embed/${video.split('v=')[1]}`} className="w-full h-full" frameBorder="0" allowFullScreen></iframe>
+            <div key={index} className="aspect-video bg-black/50 p-2 rounded">
+              <iframe src={`https://www.youtube.com/embed/${video.split('v=')[1]}`} className="w-full h-full rounded" frameBorder="0" allowFullScreen></iframe>
             </div>
           ))}
           {images.map((image, index) => (
-            <img key={index} src={image} alt={`Media ${index}`} className="w-full h-auto" />
+            <img key={index} src={image} alt={`Media ${index}`} className="w-full h-auto rounded" />
           ))}
         </div>
       </div>
