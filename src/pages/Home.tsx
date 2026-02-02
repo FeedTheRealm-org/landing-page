@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
+import PostCard from '../components/PostCard';
 
 function Home() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -13,16 +13,38 @@ function Home() {
   useEffect(() => {
     // Load posts
     const loadPosts = async () => {
-      const postModules = import.meta.glob('/data/blog-page/**/*.md', { query: '?raw', import: 'default' });
+      const postModules = import.meta.glob('/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
       const postList = [];
+      
       for (const path in postModules) {
-        const content = await postModules[path]();
-        const date = path.split('/')[3];
-        postList.push({ date, content, path });
+        const metadataContent = await postModules[path]();
+        const metadata = yaml.load(metadataContent as string) as { post: { title: string; date: string; author: string } };
+        
+        // Get the post folder path
+        const postFolder = path.replace('/metadata.yaml', '');
+        
+        // Load thumbnail
+        const thumbnailModules = import.meta.glob('/data/blog-page/**/imgs/thumbnail.jpg', { query: '?url', import: 'default' });
+        const thumbnailPath = `${postFolder}/imgs/thumbnail.jpg`;
+        let thumbnail = '';
+        
+        for (const thumbPath in thumbnailModules) {
+          if (thumbPath === thumbnailPath) {
+            thumbnail = (await thumbnailModules[thumbPath]()) as string;
+            break;
+          }
+        }
+        
+        postList.push({
+          ...metadata.post,
+          folder: postFolder,
+          thumbnail
+        });
       }
-      // Sort by date descending
+      
+      // Sort by date descending and take latest 3
       postList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      setPosts(postList.slice(0, 3)); // Latest 3
+      setPosts(postList.slice(0, 3));
     };
 
     // Load videos
@@ -92,10 +114,7 @@ function Home() {
           <h3 className="text-2xl md:text-4xl font-bold text-center mb-12 text-white">Latest Posts</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {posts.map((post, index) => (
-              <div key={index} className="bg-black/70 backdrop-blur-sm p-6 rounded text-white">
-                <h4 className="text-lg md:text-xl font-bold mb-4">{post.date}</h4>
-                <ReactMarkdown>{post.content}</ReactMarkdown>
-              </div>
+              <PostCard key={index} post={post} />
             ))}
           </div>
           <div className="text-center mt-8">
