@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import yaml from 'js-yaml';
 import PostCard from '../components/PostCard';
+import { FaClock } from 'react-icons/fa';
 
 function Home() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -9,6 +10,7 @@ function Home() {
   const [images, setImages] = useState<string[]>([]);
   const [backgroundUpper, setBackgroundUpper] = useState<string>('');
   const [backgroundLower, setBackgroundLower] = useState<string>('');
+  const [showPopup, setShowPopup] = useState<boolean>(false);
 
   useEffect(() => {
     // Load posts
@@ -101,8 +103,8 @@ function Home() {
           </div>
           <p className="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">The ultimate MMO experience with world creation tools</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Player</button>
-            <button className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Creator</button>
+            <button onClick={() => setShowPopup(true)} className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Player</button>
+            <button onClick={() => setShowPopup(true)} className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Creator</button>
           </div>
         </div>
       </section>
@@ -118,7 +120,7 @@ function Home() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link to="/blog" className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded text-white">Show More</Link>
+            <Link to="/blog" className="border border-white text-white hover:bg-white hover:text-black px-6 py-3 rounded transition">Show More</Link>
           </div>
         </div>
       </section>
@@ -138,10 +140,22 @@ function Home() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link to="/media" className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded">Show More</Link>
+            <Link to="/media" className="border border-white text-white hover:bg-white hover:text-black px-6 py-3 rounded transition">Show More</Link>
           </div>
         </div>
       </section>
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white text-black p-6 rounded-lg max-w-md mx-4">
+            <FaClock className="text-4xl text-blue-600 mb-4 mx-auto" />
+            <h2 className="text-xl font-bold mb-2 text-center">Coming Soon!</h2>
+            <p className="text-center">Early access downloads are not yet available but will be in the future.</p>
+            <div className="text-center mt-4">
+              <button onClick={() => setShowPopup(false)} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
