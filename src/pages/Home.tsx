@@ -11,9 +11,10 @@ function Home() {
     const [backgroundUpper, setBackgroundUpper] = useState<string>('');
     const [backgroundLower, setBackgroundLower] = useState<string>('');
     const [showPopup, setShowPopup] = useState<boolean>(false);
+    const [description, setDescription] = useState<string>('');
+    const [discordLink, setDiscordLink] = useState<string>('');
 
     useEffect(() => {
-        // Load posts
         const loadPosts = async () => {
             const postModules = import.meta.glob('/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
             const postList = [];
@@ -85,10 +86,19 @@ function Home() {
             setBackgroundLower(lowerModule.default);
         };
 
+        // Load metadata
+        const loadMetadata = async () => {
+            const metadataModule = await import('/data/metadata.yaml?raw');
+            const metadata = yaml.load(metadataModule.default) as { description: string; socials: { discord: string } };
+            setDescription(metadata.description);
+            setDiscordLink(metadata.socials.discord);
+        };
+
         loadPosts();
         loadVideos();
         loadImages();
         loadBackgrounds();
+        loadMetadata();
     }, []);
 
     return (
@@ -105,6 +115,45 @@ function Home() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <button onClick={() => setShowPopup(true)} className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Player</button>
                         <button onClick={() => setShowPopup(true)} className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Creator</button>
+                    </div>
+                </div>
+            </section>
+
+            {/* Game Description */}
+            <section className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
+                <div className="container mx-auto px-4 text-center relative z-10">
+                    <div className="max-w-4xl mx-auto">
+                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
+                            Discover the Future of Gaming
+                        </h3>
+                        <p className="text-lg md:text-xl mb-10 text-gray-200 leading-relaxed">
+                            {description}
+                        </p>
+                        <a
+                            href={discordLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group inline-flex items-center px-8 py-4
+                                bg-gradient-to-r from-blue-600 to-purple-600
+                                hover:from-blue-700 hover:to-purple-700
+                                text-white font-extrabold text-lg
+                                rounded-full
+                                transition-all duration-300
+                                transform hover:scale-105
+                                shadow-lg hover:shadow-2xl
+                                [text-shadow:0_2px_4px_rgba(0,0,0,0.6)]"
+                        >
+                            <span className='text-white opacity-50 group-hover:opacity-100 transition-opacity'>Join Our Community</span>
+                            <svg className="ml-2 w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    fillRule="evenodd"
+                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+                        </a>
+
                     </div>
                 </div>
             </section>

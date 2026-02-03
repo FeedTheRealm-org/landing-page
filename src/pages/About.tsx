@@ -4,6 +4,7 @@ import yaml from 'js-yaml';
 function About() {
   const [background, setBackground] = useState<string>('');
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [description, setDescription] = useState<string>('');
 
   useEffect(() => {
     const loadBackground = async () => {
@@ -39,8 +40,15 @@ function About() {
       setTeamMembers(members);
     };
 
+    const loadDescription = async () => {
+      const metadataModule = await import('/data/metadata.yaml?raw');
+      const metadata = yaml.load(metadataModule.default) as { description: string };
+      setDescription(metadata.description);
+    };
+
     loadBackground();
     loadTeam();
+    loadDescription();
   }, []);
 
   return (
@@ -49,7 +57,7 @@ function About() {
       <div className="container mx-auto px-4 py-20 relative z-10 text-white">
         <h1 className="text-3xl md:text-5xl font-bold mb-8 text-center">About Feed the Realm</h1>
         <p className="text-base md:text-lg max-w-3xl mx-auto text-center">
-          Feed the Realm is a revolutionary MMO game where players can explore countless worlds created by the community. With our world creator tool, anyone can design and publish their own worlds for others to enjoy.
+          {description}
         </p>
 
         {/* Team Section */}
