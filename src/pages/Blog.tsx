@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import yaml from 'js-yaml';
+import PostCard from '../components/PostCard';
 
 function Blog() {
     const [posts, setPosts] = useState<any[]>([]);
@@ -57,22 +58,7 @@ function Blog() {
                 <h1 className="text-3xl md:text-5xl font-bold text-center mb-12">Blog</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {posts.map((post, index) => (
-                        <div
-                            key={index}
-                            className="bg-black/70 backdrop-blur-sm p-6 rounded cursor-pointer hover:bg-black/80 transition-all duration-300"
-                            onClick={() => console.log('Navigate to post:', post.folder)}
-                        >
-                            {post.thumbnail && (
-                                <img
-                                    src={post.thumbnail}
-                                    alt={post.title}
-                                    className="w-full h-48 object-cover rounded mb-4"
-                                />
-                            )}
-                            <h4 className="text-lg md:text-xl font-bold mb-2">{post.title}</h4>
-                            <p className="text-sm text-gray-300 mb-1">By {post.author}</p>
-                            <p className="text-sm text-gray-400">{new Date(post.date).toLocaleDateString()}</p>
-                        </div>
+                        <PostCard key={index} post={post} />
                     ))}
                 </div>
             </div>
