@@ -5,7 +5,7 @@ function Features() {
 
   useEffect(() => {
     const loadBackground = async () => {
-      const bgModule = await import('/public/data/features-page/background.jpg?url');
+      const bgModule = await import('/data/features-page/background.jpg?url');
       setBackground(bgModule.default);
     };
     loadBackground();

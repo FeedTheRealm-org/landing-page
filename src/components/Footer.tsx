@@ -7,7 +7,7 @@ function Footer() {
 
   useEffect(() => {
     const loadMetadata = async () => {
-      const metadataModule = await import('/public/data/metadata.yaml?raw');
+      const metadataModule = await import('/data/metadata.yaml?raw');
       const metadata = yaml.load(metadataModule.default) as { socials: { [key: string]: string } };
       setSocials(metadata.socials);
     };
