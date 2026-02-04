@@ -16,7 +16,7 @@ function Home() {
 
     useEffect(() => {
         const loadPosts = async () => {
-            const postModules = import.meta.glob('/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
+            const postModules = import.meta.glob('/public/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
             const postList = [];
 
             for (const path in postModules) {
@@ -27,7 +27,7 @@ function Home() {
                 const postFolder = path.replace('/metadata.yaml', '');
 
                 // Load thumbnail
-                const thumbnailModules = import.meta.glob('/data/blog-page/**/imgs/thumbnail.jpg', { query: '?url', import: 'default' });
+                const thumbnailModules = import.meta.glob('/public/data/blog-page/**/imgs/thumbnail.jpg', { query: '?url', import: 'default' });
                 const thumbnailPath = `${postFolder}/imgs/thumbnail.jpg`;
                 let thumbnail = '';
 
@@ -52,14 +52,14 @@ function Home() {
 
         // Load videos
         const loadVideos = async () => {
-            const videoModule = await import('/data/media-page/videos.yaml?raw');
+            const videoModule = await import('/public/data/media-page/videos.yaml?raw');
             const data = yaml.load(videoModule.default) as { links: string[] };
             setVideos(data.links.slice(0, 3)); // Latest 3
         };
 
         // Load images
         const loadImages = async () => {
-            const imageModules = import.meta.glob('/data/media-page/imgs/*', { query: '?url', import: 'default' });
+            const imageModules = import.meta.glob('/public/data/media-page/imgs/*', { query: '?url', import: 'default' });
             const imageList: string[] = [];
             for (const path in imageModules) {
                 const url = await imageModules[path]() as string;
@@ -71,7 +71,7 @@ function Home() {
         // Load background image
         // const loadBackground = async () => {
         //   try {
-        //     const bgModule = await import('/data/home-page/background.jpg?url');
+        //     const bgModule = await import('/public/data/home-page/background.jpg?url');
         //     setBackground(bgModule.default);
         //   } catch (e) {
         //     // Background not found, use default
@@ -80,15 +80,15 @@ function Home() {
 
         // Load background images
         const loadBackgrounds = async () => {
-            const upperModule = await import('/data/home-page/background-upper.jpg?url');
-            const lowerModule = await import('/data/home-page/background-lower.jpg?url');
+            const upperModule = await import('/public/data/home-page/background-upper.jpg?url');
+            const lowerModule = await import('/public/data/home-page/background-lower.jpg?url');
             setBackgroundUpper(upperModule.default);
             setBackgroundLower(lowerModule.default);
         };
 
         // Load metadata
         const loadMetadata = async () => {
-            const metadataModule = await import('/data/metadata.yaml?raw');
+            const metadataModule = await import('/public/data/metadata.yaml?raw');
             const metadata = yaml.load(metadataModule.default) as { description: string; socials: { discord: string } };
             setDescription(metadata.description);
             setDiscordLink(metadata.socials.discord);

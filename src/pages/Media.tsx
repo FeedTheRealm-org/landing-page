@@ -8,13 +8,13 @@ function Media() {
 
     useEffect(() => {
         const loadVideos = async () => {
-            const videoModule = await import('/data/media-page/videos.yaml?raw');
+            const videoModule = await import('/public/data/media-page/videos.yaml?raw');
             const data = yaml.load(videoModule.default) as { links: string[] };
             setVideos(data.links);
         };
 
         const loadImages = async () => {
-            const imageModules = import.meta.glob('/data/media-page/imgs/*', { query: '?url', import: 'default' });
+            const imageModules = import.meta.glob('/public/data/media-page/imgs/*', { query: '?url', import: 'default' });
             const imageList: string[] = [];
             for (const path in imageModules) {
                 const url = await imageModules[path]() as string;
@@ -24,7 +24,7 @@ function Media() {
         };
 
         const loadBackground = async () => {
-            const bgModule = await import('/data/media-page/background.jpg?url');
+            const bgModule = await import('/public/data/media-page/background.jpg?url');
             setBackground(bgModule.default);
         };
 

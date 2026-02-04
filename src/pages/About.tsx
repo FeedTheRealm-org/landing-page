@@ -8,20 +8,20 @@ function About() {
 
   useEffect(() => {
     const loadBackground = async () => {
-      const bgModule = await import('/data/about-page/background.jpg?url');
+      const bgModule = await import('/public/data/about-page/background.jpg?url');
       setBackground(bgModule.default);
     };
 
     const loadTeam = async () => {
-      const teamYamlModule = await import('/data/about-page/team/team.yaml?raw');
+      const teamYamlModule = await import('/public/data/about-page/team/team.yaml?raw');
       const teamData = yaml.load(teamYamlModule.default) as { members: Record<string, { name: string; position: string }> };
 
-      const imageModules = import.meta.glob('/data/about-page/team/imgs/*.jpg', { query: '?url', import: 'default' });
+      const imageModules = import.meta.glob('/public/data/about-page/team/imgs/*.jpg', { query: '?url', import: 'default' });
       const members = [];
 
       for (const id in teamData.members) {
         const member = teamData.members[id];
-        const imagePath = `/data/about-page/team/imgs/${id}.jpg`;
+        const imagePath = `/public/data/about-page/team/imgs/${id}.jpg`;
         let imageUrl = '';
 
         for (const path in imageModules) {
@@ -41,7 +41,7 @@ function About() {
     };
 
     const loadDescription = async () => {
-      const metadataModule = await import('/data/metadata.yaml?raw');
+      const metadataModule = await import('/public/data/metadata.yaml?raw');
       const metadata = yaml.load(metadataModule.default) as { description: string };
       setDescription(metadata.description);
     };

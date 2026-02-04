@@ -8,7 +8,7 @@ function Blog() {
 
     useEffect(() => {
         const loadPosts = async () => {
-            const postModules = import.meta.glob('/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
+            const postModules = import.meta.glob('/public/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
             const postList = [];
 
             for (const path in postModules) {
@@ -19,7 +19,7 @@ function Blog() {
                 const postFolder = path.replace('/metadata.yaml', '');
 
                 // Load thumbnail
-                const thumbnailModules = import.meta.glob('/data/blog-page/**/imgs/thumbnail.jpg', { query: '?url', import: 'default' });
+                const thumbnailModules = import.meta.glob('/public/data/blog-page/**/imgs/thumbnail.jpg', { query: '?url', import: 'default' });
                 const thumbnailPath = `${postFolder}/imgs/thumbnail.jpg`;
                 let thumbnail = '';
 
@@ -43,7 +43,7 @@ function Blog() {
         };
 
         const loadBackground = async () => {
-            const bgModule = await import('/data/blog-page/background.jpg?url');
+            const bgModule = await import('/public/data/blog-page/background.jpg?url');
             setBackground(bgModule.default);
         };
 
