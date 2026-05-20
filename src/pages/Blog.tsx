@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import yaml from 'js-yaml';
+import { dataBasePath } from '../services/config';
 import PostCard from '../components/PostCard';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 function Blog() {
     const [posts, setPosts] = useState<any[]>([]);
@@ -8,43 +12,38 @@ function Blog() {
 
     useEffect(() => {
         const loadPosts = async () => {
-            const postModules = import.meta.glob('/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
-            const postList = [];
+            try {
+                const manifestRes = await fetch(`${dataBasePath}/blog-page/manifest.json`);
+                if (!manifestRes.ok) return;
+                const dates: string[] = await manifestRes.json();
+                const postList: any[] = [];
 
-            for (const path in postModules) {
-                const metadataContent = await postModules[path]();
-                const metadata = yaml.load(metadataContent as string) as { post: { title: string; date: string; author: string } };
-
-                // Get the post folder path
-                const postFolder = path.replace('/metadata.yaml', '');
-
-                // Load thumbnail
-                const thumbnailModules = import.meta.glob('/data/blog-page/**/imgs/thumbnail.jpg', { query: '?url', import: 'default' });
-                const thumbnailPath = `${postFolder}/imgs/thumbnail.jpg`;
-                let thumbnail = '';
-
-                for (const thumbPath in thumbnailModules) {
-                    if (thumbPath === thumbnailPath) {
-                        thumbnail = await thumbnailModules[thumbPath]() as string;
-                        break;
+                for (const date of dates) {
+                    try {
+                        const metaRes = await fetch(`${dataBasePath}/blog-page/${date}/metadata.yaml`);
+                        if (!metaRes.ok) continue;
+                        const metaText = await metaRes.text();
+                        const metadata = yaml.load(metaText as string) as { post: { title: string; date: string; author: string } };
+                        const thumbnail = `${dataBasePath}/blog-page/${date}/imgs/thumbnail.jpg`;
+                        postList.push({
+                            ...metadata.post,
+                            folder: `/data/blog-page/${date}`,
+                            thumbnail,
+                        });
+                    } catch (e) {
+                        // skip
                     }
                 }
 
-                postList.push({
-                    ...metadata.post,
-                    folder: postFolder,
-                    thumbnail
-                });
+                postList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                setPosts(postList);
+            } catch (e) {
+                // ignore
             }
-
-            // Sort by date descending
-            postList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            setPosts(postList);
         };
 
         const loadBackground = async () => {
-            const bgModule = await import('/data/blog-page/background.jpg?url');
-            setBackground(bgModule.default);
+            setBackground(`${dataBasePath}/blog-page/background.jpg`);
         };
 
         loadPosts();
@@ -52,17 +51,17 @@ function Blog() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-cover bg-center relative" style={{ backgroundImage: `url(${background})` }}>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-            <div className="container mx-auto px-4 py-20 relative z-10 text-white">
-                <h1 className="text-3xl md:text-5xl font-bold text-center mb-12">Blog</h1>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+            <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
+            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
+                <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700 }}>Blog</Typography>
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: 4 }}>
                     {posts.map((post, index) => (
                         <PostCard key={index} post={post} />
                     ))}
-                </div>
-            </div>
-        </div>
+                </Box>
+            </Container>
+        </Box>
     );
 }
 

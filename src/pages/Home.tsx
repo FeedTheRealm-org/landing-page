@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import yaml from 'js-yaml';
+import { dataBasePath } from '../services/config';
 import PostCard from '../components/PostCard';
-import { FaClock } from 'react-icons/fa';
+import DownloadDialog from '../components/DownloadDialog';
 
 function Home() {
     const [posts, setPosts] = useState<any[]>([]);
@@ -10,51 +11,54 @@ function Home() {
     const [images, setImages] = useState<string[]>([]);
     const [backgroundUpper, setBackgroundUpper] = useState<string>('');
     const [backgroundLower, setBackgroundLower] = useState<string>('');
-    const [showPopup, setShowPopup] = useState<boolean>(false);
+    const [downloadModalOpen, setDownloadModalOpen] = useState<boolean>(false);
+    const [downloadApp, setDownloadApp] = useState<'ftr_game' | 'ftr_world_editor' | null>(null);
     const [description, setDescription] = useState<string>('');
     const [discordLink, setDiscordLink] = useState<string>('');
 
     useEffect(() => {
         const loadPosts = async () => {
-            const postModules = import.meta.glob('/data/blog-page/**/metadata.yaml', { query: '?raw', import: 'default' });
-            const postList = [];
+            try {
+                const manifestRes = await fetch(`${dataBasePath}/blog-page/manifest.json`);
+                if (!manifestRes.ok) return;
+                const dates: string[] = await manifestRes.json();
+                const postList: any[] = [];
 
-            for (const path in postModules) {
-                const metadataContent = await postModules[path]();
-                const metadata = yaml.load(metadataContent as string) as { post: { title: string; date: string; author: string } };
-
-                // Get the post folder path
-                const postFolder = path.replace('/metadata.yaml', '');
-
-                // Load thumbnail
-                const thumbnailModules = import.meta.glob('/data/blog-page/**/imgs/thumbnail.jpg', { query: '?url', import: 'default' });
-                const thumbnailPath = `${postFolder}/imgs/thumbnail.jpg`;
-                let thumbnail = '';
-
-                for (const thumbPath in thumbnailModules) {
-                    if (thumbPath === thumbnailPath) {
-                        thumbnail = (await thumbnailModules[thumbPath]()) as string;
-                        break;
+                for (const date of dates) {
+                    try {
+                        const metaRes = await fetch(`${dataBasePath}/blog-page/${date}/metadata.yaml`);
+                        if (!metaRes.ok) continue;
+                        const metaText = await metaRes.text();
+                        const metadata = yaml.load(metaText as string) as { post: { title: string; date: string; author: string } };
+                        const thumbnail = `${dataBasePath}/blog-page/${date}/imgs/thumbnail.jpg`;
+                        postList.push({
+                            ...metadata.post,
+                            folder: `/data/blog-page/${date}`,
+                            thumbnail,
+                        });
+                    } catch (e) {
+                        // skip
                     }
                 }
 
-                postList.push({
-                    ...metadata.post,
-                    folder: postFolder,
-                    thumbnail
-                });
+                postList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                setPosts(postList.slice(0, 3));
+            } catch (e) {
+                // ignore
             }
-
-            // Sort by date descending and take latest 3
-            postList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            setPosts(postList.slice(0, 3));
         };
 
         // Load videos
         const loadVideos = async () => {
-            const videoModule = await import('/data/media-page/videos.yaml?raw');
-            const data = yaml.load(videoModule.default) as { links: string[] };
-            setVideos(data.links.slice(0, 3)); // Latest 3
+            try {
+                const res = await fetch(`${dataBasePath}/media-page/videos.yaml`);
+                if (!res.ok) return;
+                const text = await res.text();
+                const data = yaml.load(text) as { links: string[] };
+                setVideos(data?.links?.slice(0, 3) ?? []);
+            } catch (e) {
+                // ignore
+            }
         };
 
         // Load images
@@ -80,18 +84,22 @@ function Home() {
 
         // Load background images
         const loadBackgrounds = async () => {
-            const upperModule = await import('/data/home-page/background-upper.jpg?url');
-            const lowerModule = await import('/data/home-page/background-lower.jpg?url');
-            setBackgroundUpper(upperModule.default);
-            setBackgroundLower(lowerModule.default);
+            setBackgroundUpper(`${dataBasePath}/home-page/background-upper.jpg`);
+            setBackgroundLower(`${dataBasePath}/home-page/background-lower.jpg`);
         };
 
         // Load metadata
         const loadMetadata = async () => {
-            const metadataModule = await import('/data/metadata.yaml?raw');
-            const metadata = yaml.load(metadataModule.default) as { description: string; socials: { discord: string } };
-            setDescription(metadata.description);
-            setDiscordLink(metadata.socials.discord);
+            try {
+                const res = await fetch(`${dataBasePath}/metadata.yaml`);
+                if (!res.ok) return;
+                const text = await res.text();
+                const metadata = yaml.load(text) as { description: string; socials: { discord: string } };
+                setDescription(metadata?.description ?? '');
+                setDiscordLink(metadata?.socials?.discord ?? '#');
+            } catch (e) {
+                // ignore
+            }
         };
 
         loadPosts();
@@ -112,9 +120,30 @@ function Home() {
                         <h2 className="text-4xl md:text-6xl font-bold text-white">Feed the Realm</h2>
                     </div>
                     <p className="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">The ultimate MMO experience with world creation tools</p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button onClick={() => setShowPopup(true)} className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Player</button>
-                        <button onClick={() => setShowPopup(true)} className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg text-lg font-semibold transition">Download Creator</button>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <div>
+                            <button
+                                onClick={() => {
+                                    setDownloadApp('ftr_game');
+                                    setDownloadModalOpen(true);
+                                }}
+                                className="bg-[linear-gradient(135deg,rgba(245,180,74,0.9),rgba(245,180,74,0.55))] hover:brightness-105 px-6 py-3 rounded-lg text-lg font-semibold transition"
+                            >
+                                Download Feed the Realm - Game
+                            </button>
+                        </div>
+
+                        <div>
+                            <button
+                                onClick={() => {
+                                    setDownloadApp('ftr_world_editor');
+                                    setDownloadModalOpen(true);
+                                }}
+                                className="bg-[linear-gradient(135deg,rgba(106,228,255,0.9),rgba(106,228,255,0.45))] hover:brightness-105 px-6 py-3 rounded-lg text-lg font-semibold transition"
+                            >
+                                Download Feed the Realm - World Editor
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -193,17 +222,8 @@ function Home() {
                     </div>
                 </div>
             </section>
-            {showPopup && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white text-black p-6 rounded-lg max-w-md mx-4">
-                        <FaClock className="text-4xl text-blue-600 mb-4 mx-auto" />
-                        <h2 className="text-xl font-bold mb-2 text-center">Coming Soon!</h2>
-                        <p className="text-center">Early access downloads are not yet available but will be in the future.</p>
-                        <div className="text-center mt-4">
-                            <button onClick={() => setShowPopup(false)} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Close</button>
-                        </div>
-                    </div>
-                </div>
+            {downloadModalOpen && (
+                <DownloadDialog open={downloadModalOpen} appName={downloadApp} onClose={() => setDownloadModalOpen(false)} />
             )}
         </div>
     );

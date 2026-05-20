@@ -19,20 +19,13 @@ function PostCard({ post, className = '' }: PostCardProps) {
   };
 
   return (
-    <Link
-      to={`/blog/${post.folder.split('/').pop()}`}
-      className={`bg-black/70 backdrop-blur-sm p-6 rounded cursor-pointer hover:bg-black/80 transition-all duration-300 block ${className}`}
-    >
+    <Link to={`/blog/${post.folder.split('/').pop()}`} className={`app-card p-4 cursor-pointer hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)] transition ${className}`}>
       {post.thumbnail && (
-        <img
-          src={post.thumbnail}
-          alt={post.title}
-          className="w-full h-48 object-cover rounded mb-4"
-        />
+        <img src={post.thumbnail} alt={post.title} className="w-full h-40 object-cover rounded mb-4" />
       )}
-      <h4 className="text-lg md:text-xl font-bold mb-2">{post.title}</h4>
-      <p className="text-sm text-gray-300 mb-1">By {post.author}</p>
-      <p className="text-sm text-gray-400">{formatDate(post.date)}</p>
+      <h4 className="app-title text-lg md:text-xl font-bold mb-2">{post.title}</h4>
+      <p className="text-sm text-muted mb-1">By {post.author}</p>
+      <p className="text-sm text-muted">{formatDate(post.date)}</p>
     </Link>
   );
 }

@@ -1,22 +1,33 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 function Header() {
   return (
-    <header className="sticky top-0 bg-black bg-opacity-80 p-4 z-20">
-      <nav className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <img src="/logo.jpg" alt="Feed the Realm Logo" className="h-10 w-10" />
-          <Link to="/" className="text-xl md:text-2xl font-bold">Feed the Realm</Link>
-        </div>
-        <ul className="flex space-x-2 md:space-x-4">
-          <li><Link to="/" className="hover:text-blue-400 transition text-sm md:text-base">Home</Link></li>
-          <li><Link to="/about" className="hover:text-blue-400 transition text-sm md:text-base">About</Link></li>
-          <li><Link to="/features" className="hover:text-blue-400 transition text-sm md:text-base">Features</Link></li>
-          <li><Link to="/blog" className="hover:text-blue-400 transition text-sm md:text-base">Blog</Link></li>
-          <li><Link to="/media" className="hover:text-blue-400 transition text-sm md:text-base">Media</Link></li>
-        </ul>
-      </nav>
-    </header>
+    <AppBar position="sticky" color="transparent" elevation={0} sx={{ backdropFilter: 'blur(6px)', backgroundColor: 'rgba(10,10,12,0.6)' }}>
+      <Container maxWidth="lg">
+        <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <img src="/logo.jpg" alt="Feed the Realm Logo" style={{ height: 40, width: 40 }} />
+            <Typography variant="h6" component={RouterLink} to="/" sx={{ textDecoration: 'none', color: 'inherit', fontWeight: 700 }}>
+              Feed the Realm
+            </Typography>
+          </Box>
+
+          <Box>
+            <Button component={RouterLink} to="/" color="inherit">Home</Button>
+            <Button component={RouterLink} to="/about" color="inherit">About</Button>
+            <Button component={RouterLink} to="/features" color="inherit">Features</Button>
+            <Button component={RouterLink} to="/blog" color="inherit">Blog</Button>
+            <Button component={RouterLink} to="/media" color="inherit">Media</Button>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }
 

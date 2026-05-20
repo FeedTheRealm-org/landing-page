@@ -1,15 +1,25 @@
 import { useState, useEffect } from 'react';
 import { FaYoutube, FaDiscord, FaTwitter, FaGlobe } from 'react-icons/fa';
 import yaml from 'js-yaml';
+import { dataBasePath } from '../services/config';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
 
 function Footer() {
   const [socials, setSocials] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const loadMetadata = async () => {
-      const metadataModule = await import('/data/metadata.yaml?raw');
-      const metadata = yaml.load(metadataModule.default) as { socials: { [key: string]: string } };
-      setSocials(metadata.socials);
+      try {
+        const res = await fetch(`${dataBasePath}/metadata.yaml`);
+        if (!res.ok) return;
+        const text = await res.text();
+        const metadata = yaml.load(text) as { socials: { [key: string]: string } };
+        setSocials(metadata?.socials ?? {});
+      } catch (e) {
+        // ignore
+      }
     };
     loadMetadata();
   }, []);
@@ -43,33 +53,18 @@ function Footer() {
             </p>
           </div>
 
-          <div className="flex justify-center space-x-8 mb-8">
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mb: 4 }}>
             {Object.entries(socials).map(([platform, url]) => (
-              <a
-                key={platform}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col items-center space-y-2 p-4 rounded-lg hover:bg-gray-800/50 transition-all duration-300 transform hover:scale-105"
-              >
-                <div className="text-gray-400 group-hover:text-white transition-colors duration-300">
-                  {getSocialIcon(platform)}
-                </div>
-                <span className="text-sm font-medium capitalize text-gray-300 group-hover:text-white transition-colors duration-300">
-                  {platform}
-                </span>
-              </a>
+              <IconButton key={platform} href={url} target="_blank" rel="noopener noreferrer" color="primary">
+                {getSocialIcon(platform)}
+              </IconButton>
             ))}
-          </div>
+          </Box>
 
-          <div className="text-center border-t border-gray-800 pt-8">
-            <p className="text-gray-400 text-sm mb-2">
-              &copy; 2026 Feed the Realm. All rights reserved.
-            </p>
-            <p className="text-gray-500 text-xs">
-              Crafting worlds, building communities, revolutionizing gaming.
-            </p>
-          </div>
+          <Box sx={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.04)', pt: 3 }}>
+            <Typography variant="body2" color="text.secondary">&copy; 2026 Feed the Realm. All rights reserved.</Typography>
+            <Typography variant="caption" color="text.secondary">Crafting worlds, building communities, revolutionizing gaming.</Typography>
+          </Box>
         </div>
       </div>
     </footer>

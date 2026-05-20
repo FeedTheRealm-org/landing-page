@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import yaml from 'js-yaml';
+import { dataBasePath } from '../services/config';
 
 function BlogPost() {
   const { date } = useParams<{ date: string }>();
@@ -23,39 +28,41 @@ function BlogPost() {
         return;
       }
 
-      try {
-        // Load metadata
-        const metadataModule = await import(`/data/blog-page/${date}/metadata.yaml?raw`);
-        const metadata = yaml.load(metadataModule.default as string) as {
-          post: { title: string; date: string; author: string }
-        };
-
-        // Load post content
-        const contentModule = await import(`/data/blog-page/${date}/post.md?raw`);
-        const content = contentModule.default as string;
-
-        // Load background (optional)
-        let backgroundUrl = '';
         try {
-          const bgModule = await import(`/data/blog-page/${date}/background.jpg?url`);
-          backgroundUrl = bgModule.default as string;
-        } catch {
-          // Use blog page background as fallback
-          try {
-            const blogBgModule = await import('/data/blog-page/background.jpg?url');
-            backgroundUrl = blogBgModule.default as string;
-          } catch {
-            // No background available
-          }
-        }
+          // Load metadata
+          const metaRes = await fetch(`${dataBasePath}/blog-page/${date}/metadata.yaml`);
+          if (!metaRes.ok) throw new Error('metadata not found');
+          const metaText = await metaRes.text();
+          const metadata = yaml.load(metaText as string) as {
+            post: { title: string; date: string; author: string }
+          };
 
-        setPost({
-          ...metadata.post,
-          content
-        });
-        setBackground(backgroundUrl);
-        setLoading(false);
-      } catch (err) {
+          // Load post content
+          const contentRes = await fetch(`${dataBasePath}/blog-page/${date}/post.md`);
+          if (!contentRes.ok) throw new Error('content not found');
+          const content = await contentRes.text();
+
+          // Load background (optional)
+          let backgroundUrl = '';
+          try {
+            const bgRes = await fetch(`${dataBasePath}/blog-page/${date}/background.jpg`);
+            if (bgRes.ok) backgroundUrl = `${dataBasePath}/blog-page/${date}/background.jpg`;
+            else {
+              // fallback to blog page background
+              const blogBgRes = await fetch(`${dataBasePath}/blog-page/background.jpg`);
+              if (blogBgRes.ok) backgroundUrl = `${dataBasePath}/blog-page/background.jpg`;
+            }
+          } catch (e) {
+            // ignore
+          }
+
+          setPost({
+            ...metadata.post,
+            content
+          });
+          setBackground(backgroundUrl);
+          setLoading(false);
+        } catch (err) {
         console.error('Error loading post:', err);
         setError('Post not found');
         setLoading(false);
@@ -73,31 +80,31 @@ function BlogPost() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
+      <Box sx={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Typography>Loading...</Typography>
+      </Box>
     );
   }
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="text-xl text-red-400">{error || 'Post not found'}</div>
-      </div>
+      <Box sx={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Typography color="error">{error || 'Post not found'}</Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="min-h-screen bg-cover bg-center relative" style={{ backgroundImage: `url(${background})` }}>
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-      <div className="container mx-auto px-4 py-20 relative z-10 text-white">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">{post.title}</h1>
-          <div className="flex items-center mb-8 text-gray-300">
-            <span className="mr-4">By {post.author}</span>
+    <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+      <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
+        <Box sx={{ maxWidth: 900, mx: 'auto' }}>
+          <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>{post.title}</Typography>
+          <Box sx={{ display: 'flex', gap: 2, mb: 3, color: 'text.secondary' }}>
+            <span>By {post.author}</span>
             <span>{formatDate(post.date)}</span>
-          </div>
-          <div className="bg-black/70 backdrop-blur-sm p-8 rounded-lg">
+          </Box>
+          <Paper sx={{ p: 4, bgcolor: 'rgba(20,16,24,0.6)' }}>
             <ReactMarkdown
               components={{
                 h1: ({ children }) => <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{children}</h2>,
@@ -128,18 +135,18 @@ function BlogPost() {
                   // Transform relative image paths to absolute paths
                   let imageSrc = src;
                   if (src && src.startsWith('./imgs/')) {
-                    imageSrc = `/data/blog-page/${date}/imgs/${src.substring(7)}`;
-                  }
+                      imageSrc = `${dataBasePath}/blog-page/${date}/imgs/${src.substring(7)}`;
+                    }
                   return <img src={imageSrc} alt={alt} {...props} className="rounded-lg max-w-full h-auto my-4" />;
                 },
               }}
             >
-              {post.content}
-            </ReactMarkdown>
-          </div>
-        </div>
-      </div>
-    </div>
+                {post.content}
+              </ReactMarkdown>
+            </Paper>
+          </Box>
+        </Container>
+      </Box>
   );
 }
 

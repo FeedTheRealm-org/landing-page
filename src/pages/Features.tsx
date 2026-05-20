@@ -1,33 +1,33 @@
 import { useState, useEffect } from 'react';
+import { dataBasePath } from '../services/config';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 function Features() {
   const [background, setBackground] = useState<string>('');
 
   useEffect(() => {
-    const loadBackground = async () => {
-      const bgModule = await import('/data/features-page/background.jpg?url');
-      setBackground(bgModule.default);
-    };
-    loadBackground();
+    setBackground(`${dataBasePath}/features-page/background.jpg`);
   }, []);
 
   return (
-    <div className="min-h-screen bg-cover bg-center relative" style={{ backgroundImage: `url(${background})` }}>
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-      <div className="container mx-auto px-4 py-20 relative z-10 text-white">
-        <h1 className="text-3xl md:text-5xl font-bold text-center mb-12">Features</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="text-center">
-            <h2 className="text-xl md:text-3xl font-bold mb-4">MMO Game Player</h2>
-            <p className="text-sm md:text-lg">Play in multiple worlds, interact with players worldwide, and embark on epic adventures.</p>
-          </div>
-          <div className="text-center">
-            <h2 className="text-xl md:text-3xl font-bold mb-4">World Creator</h2>
-            <p className="text-sm md:text-lg">Design your own worlds with powerful tools, publish them, and share your creations with the community.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+      <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
+        <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700 }}>Features</Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 4 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>MMO Game Player</Typography>
+            <Typography>Play in multiple worlds, interact with players worldwide, and embark on epic adventures.</Typography>
+          </Box>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>World Creator</Typography>
+            <Typography>Design your own worlds with powerful tools, publish them, and share your creations with the community.</Typography>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 }
 

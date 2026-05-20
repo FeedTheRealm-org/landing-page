@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
 import yaml from 'js-yaml';
+import { dataBasePath } from '../services/config';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
 
 function About() {
   const [background, setBackground] = useState<string>('');
@@ -8,42 +14,56 @@ function About() {
 
   useEffect(() => {
     const loadBackground = async () => {
-      const bgModule = await import('/data/about-page/background.jpg?url');
-      setBackground(bgModule.default);
+      setBackground(`${dataBasePath}/about-page/background.jpg`);
     };
 
     const loadTeam = async () => {
-      const teamYamlModule = await import('/data/about-page/team/team.yaml?raw');
-      const teamData = yaml.load(teamYamlModule.default) as { members: Record<string, { name: string; position: string }> };
+      try {
+        const res = await fetch(`${dataBasePath}/about-page/team/team.yaml`);
+        if (!res.ok) return;
+        const text = await res.text();
+        const teamData = yaml.load(text) as { members: Record<string, { name: string; position: string }> };
 
-      const imageModules = import.meta.glob('/data/about-page/team/imgs/*.jpg', { query: '?url', import: 'default' });
-      const members = [];
+        const imageModules = import.meta.glob('/data/about-page/team/imgs/*.jpg', { query: '?url', import: 'default' });
+        const members = [];
 
-      for (const id in teamData.members) {
-        const member = teamData.members[id];
-        const imagePath = `/data/about-page/team/imgs/${id}.jpg`;
-        let imageUrl = '';
+        for (const id in teamData.members) {
+          const member = teamData.members[id];
+          const imagePath = `${dataBasePath}/about-page/team/imgs/${id}.jpg`;
+          let imageUrl = '';
 
-        for (const path in imageModules) {
-          if (path === imagePath) {
-            imageUrl = await imageModules[path]() as string;
-            break;
+          for (const path in imageModules) {
+            if (path === imagePath) {
+              imageUrl = await imageModules[path]() as string;
+              break;
+            }
           }
+
+          // Fallback to direct URL if import.meta.glob didn't match
+          if (!imageUrl) imageUrl = `${dataBasePath}/about-page/team/imgs/${id}.jpg`;
+
+          members.push({
+            ...member,
+            image: imageUrl
+          });
         }
 
-        members.push({
-          ...member,
-          image: imageUrl
-        });
+        setTeamMembers(members);
+      } catch (e) {
+        // ignore
       }
-
-      setTeamMembers(members);
     };
 
     const loadDescription = async () => {
-      const metadataModule = await import('/data/metadata.yaml?raw');
-      const metadata = yaml.load(metadataModule.default) as { description: string };
-      setDescription(metadata.description);
+      try {
+        const res = await fetch(`${dataBasePath}/metadata.yaml`);
+        if (!res.ok) return;
+        const text = await res.text();
+        const metadata = yaml.load(text) as { description: string };
+        setDescription(metadata?.description ?? '');
+      } catch (e) {
+        // ignore
+      }
     };
 
     loadBackground();
@@ -52,36 +72,30 @@ function About() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-cover bg-center relative" style={{ backgroundImage: `url(${background})` }}>
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-      <div className="container mx-auto px-4 py-20 relative z-10 text-white">
-        <h1 className="text-3xl md:text-5xl font-bold mb-8 text-center">About Feed the Realm</h1>
-        <p className="text-base md:text-lg max-w-3xl mx-auto text-center">
-          {description}
-        </p>
+    <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+      <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
+        <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700 }}>About Feed the Realm</Typography>
+        <Typography align="center" sx={{ maxWidth: '64ch', mx: 'auto', mb: 6 }}>{description}</Typography>
 
-        {/* Team Section */}
-        <div className="mt-16">
-          <h2 className="text-2xl md:text-4xl font-bold text-center mb-8">Meet the Team</h2>
-          <p className="text-base md:text-lg max-w-4xl mx-auto text-center mb-12 text-gray-200">
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>Meet the Team</Typography>
+          <Typography align="center" sx={{ maxWidth: '72ch', mx: 'auto', mb: 4, color: 'text.secondary' }}>
             Feed the Realm was born from our team's final university project, and we're passionately developing it with cutting-edge technology, innovative gameplay mechanics, and a vision to revolutionize the MMO landscape. Our dedicated developers bring fresh perspectives and boundless creativity to create an unparalleled gaming experience.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          </Typography>
+
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 3 }}>
             {teamMembers.map((member, index) => (
-              <div key={index} className="text-center">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white"
-                />
-                <h3 className="text-lg font-semibold">{member.name}</h3>
-                <p className="text-gray-300">{member.position}</p>
-              </div>
+              <Paper key={index} sx={{ textAlign: 'center', p: 2, bgcolor: 'transparent' }}>
+                <Avatar src={member.image} alt={member.name} sx={{ width: 96, height: 96, mx: 'auto', mb: 2 }} />
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{member.name}</Typography>
+                <Typography variant="body2" color="text.secondary">{member.position}</Typography>
+              </Paper>
             ))}
-          </div>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 }
 
