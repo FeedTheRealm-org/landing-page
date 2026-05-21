@@ -81,7 +81,7 @@ export default function DownloadDialog({ open, appName, onClose }: Props) {
                             </Box>
                             <Box>
                                 <Typography variant="h6" sx={{ fontWeight: 700 }}>Linux</Typography>
-                                <Typography variant="body2" color="text.secondary">Tarball / ZIP build for Linux systems</Typography>
+                                <Typography variant="body2" color="text.secondary">ZIP build for Linux systems</Typography>
                             </Box>
                         </Box>
                     </Paper>
@@ -118,7 +118,7 @@ export default function DownloadDialog({ open, appName, onClose }: Props) {
                             </Box>
                             <Box>
                                 <Typography variant="h6" sx={{ fontWeight: 700 }}>Windows</Typography>
-                                <Typography variant="body2" color="text.secondary">Installer / ZIP build for Windows systems</Typography>
+                                <Typography variant="body2" color="text.secondary">ZIP build for Windows systems</Typography>
                             </Box>
                         </Box>
                     </Paper>
