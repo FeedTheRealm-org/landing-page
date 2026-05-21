@@ -28,41 +28,41 @@ function BlogPost() {
         return;
       }
 
+      try {
+        // Load metadata
+        const metaRes = await fetch(`${dataBasePath}/blog-page/${date}/metadata.yaml`);
+        if (!metaRes.ok) throw new Error('metadata not found');
+        const metaText = await metaRes.text();
+        const metadata = yaml.load(metaText as string) as {
+          post: { title: string; date: string; author: string }
+        };
+
+        // Load post content
+        const contentRes = await fetch(`${dataBasePath}/blog-page/${date}/post.md`);
+        if (!contentRes.ok) throw new Error('content not found');
+        const content = await contentRes.text();
+
+        // Load background (optional)
+        let backgroundUrl = '';
         try {
-          // Load metadata
-          const metaRes = await fetch(`${dataBasePath}/blog-page/${date}/metadata.yaml`);
-          if (!metaRes.ok) throw new Error('metadata not found');
-          const metaText = await metaRes.text();
-          const metadata = yaml.load(metaText as string) as {
-            post: { title: string; date: string; author: string }
-          };
-
-          // Load post content
-          const contentRes = await fetch(`${dataBasePath}/blog-page/${date}/post.md`);
-          if (!contentRes.ok) throw new Error('content not found');
-          const content = await contentRes.text();
-
-          // Load background (optional)
-          let backgroundUrl = '';
-          try {
-            const bgRes = await fetch(`${dataBasePath}/blog-page/${date}/background.jpg`);
-            if (bgRes.ok) backgroundUrl = `${dataBasePath}/blog-page/${date}/background.jpg`;
-            else {
-              // fallback to blog page background
-              const blogBgRes = await fetch(`${dataBasePath}/blog-page/background.jpg`);
-              if (blogBgRes.ok) backgroundUrl = `${dataBasePath}/blog-page/background.jpg`;
-            }
-          } catch (e) {
-            // ignore
+          const bgRes = await fetch(`${dataBasePath}/blog-page/${date}/background.jpg`);
+          if (bgRes.ok) backgroundUrl = `${dataBasePath}/blog-page/${date}/background.jpg`;
+          else {
+            // fallback to blog page background
+            const blogBgRes = await fetch(`${dataBasePath}/blog-page/background.jpg`);
+            if (blogBgRes.ok) backgroundUrl = `${dataBasePath}/blog-page/background.jpg`;
           }
+        } catch (e) {
+          // ignore
+        }
 
-          setPost({
-            ...metadata.post,
-            content
-          });
-          setBackground(backgroundUrl);
-          setLoading(false);
-        } catch (err) {
+        setPost({
+          ...metadata.post,
+          content
+        });
+        setBackground(backgroundUrl);
+        setLoading(false);
+      } catch (err) {
         console.error('Error loading post:', err);
         setError('Post not found');
         setLoading(false);
@@ -107,46 +107,46 @@ function BlogPost() {
           <Paper sx={{ p: 4, bgcolor: 'rgba(20,16,24,0.6)' }}>
             <ReactMarkdown
               components={{
-                h1: ({ children }) => <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{children}</h2>,
-                h2: ({ children }) => <h3 className="text-xl md:text-2xl font-bold mb-3 text-white mt-8">{children}</h3>,
-                h3: ({ children }) => <h4 className="text-lg md:text-xl font-semibold mb-2 text-white mt-6">{children}</h4>,
-                p: ({ children }) => <p className="text-gray-200 mb-4 leading-relaxed">{children}</p>,
-                ul: ({ children }) => <ul className="list-disc list-inside mb-4 space-y-2 text-gray-200">{children}</ul>,
-                ol: ({ children }) => <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-200">{children}</ol>,
-                li: ({ children }) => <li className="text-gray-200">{children}</li>,
-                strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
-                em: ({ children }) => <em className="italic text-gray-300">{children}</em>,
+                h1: ({ children }) => <Typography variant="h4" component="h2" sx={{ fontWeight: 700, mt: 3, mb: 2 }}>{children}</Typography>,
+                h2: ({ children }) => <Typography variant="h5" component="h3" sx={{ fontWeight: 700, mt: 4, mb: 1.5 }}>{children}</Typography>,
+                h3: ({ children }) => <Typography variant="h6" component="h4" sx={{ fontWeight: 700, mt: 3, mb: 1 }}>{children}</Typography>,
+                p: ({ children }) => <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>{children}</Typography>,
+                ul: ({ children }) => <Box component="ul" sx={{ pl: 3, mb: 2, color: 'text.secondary' }}>{children}</Box>,
+                ol: ({ children }) => <Box component="ol" sx={{ pl: 3, mb: 2, color: 'text.secondary' }}>{children}</Box>,
+                li: ({ children }) => <Typography component="li" variant="body1" sx={{ color: 'text.secondary', mb: 0.5 }}>{children}</Typography>,
+                strong: ({ children }) => <Box component="strong" sx={{ color: 'text.primary', fontWeight: 700 }}>{children}</Box>,
+                em: ({ children }) => <Box component="em" sx={{ color: 'text.secondary', fontStyle: 'italic' }}>{children}</Box>,
                 blockquote: ({ children }) => (
-                  <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-300 my-4">
+                  <Box sx={{ borderLeft: '4px solid rgba(106,228,255,0.55)', pl: 2, my: 2, color: 'text.secondary', fontStyle: 'italic' }}>
                     {children}
-                  </blockquote>
+                  </Box>
                 ),
                 code: ({ children }) => (
-                  <code className="bg-gray-800 px-2 py-1 rounded text-sm font-mono text-green-400">
+                  <Box component="code" sx={{ bgcolor: 'rgba(255,255,255,0.06)', px: 0.8, py: 0.2, borderRadius: 1, fontSize: '0.875rem', fontFamily: 'monospace', color: 'secondary.main' }}>
                     {children}
-                  </code>
+                  </Box>
                 ),
                 pre: ({ children }) => (
-                  <pre className="bg-gray-800 p-4 rounded overflow-x-auto my-4">
+                  <Box component="pre" sx={{ bgcolor: 'rgba(255,255,255,0.06)', p: 2, borderRadius: 2, overflowX: 'auto', my: 2 }}>
                     {children}
-                  </pre>
+                  </Box>
                 ),
                 img: ({ src, alt, ...props }) => {
                   // Transform relative image paths to absolute paths
                   let imageSrc = src;
                   if (src && src.startsWith('./imgs/')) {
-                      imageSrc = `${dataBasePath}/blog-page/${date}/imgs/${src.substring(7)}`;
-                    }
-                  return <img src={imageSrc} alt={alt} {...props} className="rounded-lg max-w-full h-auto my-4" />;
+                    imageSrc = `${dataBasePath}/blog-page/${date}/imgs/${src.substring(7)}`;
+                  }
+                  return <Box component="img" src={imageSrc} alt={alt} {...props} sx={{ borderRadius: 2, maxWidth: '100%', height: 'auto', my: 2 }} />;
                 },
               }}
             >
-                {post.content}
-              </ReactMarkdown>
-            </Paper>
-          </Box>
-        </Container>
-      </Box>
+              {post.content}
+            </ReactMarkdown>
+          </Paper>
+        </Box>
+      </Container>
+    </Box>
   );
 }
 

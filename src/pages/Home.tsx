@@ -4,6 +4,13 @@ import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
 import PostCard from '../components/PostCard';
 import DownloadDialog from '../components/DownloadDialog';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Avatar from '@mui/material/Avatar';
+import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 
 function Home() {
     const [posts, setPosts] = useState<any[]>([]);
@@ -110,122 +117,199 @@ function Home() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white">
-            {/* Hero */}
-            <section className="relative min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${backgroundUpper})` }}>
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-                <div className="relative text-center z-10 px-4">
-                    <div className="flex justify-center items-center mb-4">
-                        <img src="/logo.jpg" alt="Feed the Realm Logo" className="h-16 w-16 md:h-20 md:w-20 mr-4" />
-                        <h2 className="text-4xl md:text-6xl font-bold text-white">Feed the Realm</h2>
-                    </div>
-                    <p className="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">The ultimate MMO experience with world creation tools</p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <div>
-                            <button
+        <Box sx={{ minHeight: '100vh', color: 'text.primary' }}>
+            <Box
+                sx={{
+                    position: 'relative',
+                    minHeight: '100vh',
+                    display: 'grid',
+                    placeItems: 'center',
+                    backgroundImage: `url(${backgroundUpper})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
+                <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.76), rgba(0,0,0,0.58), rgba(0,0,0,0.78))' }} />
+                <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: 8 }}>
+                    <Box sx={{ textAlign: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                            <Avatar src="/logo.jpg" alt="Feed the Realm Logo" sx={{ width: 72, height: 72, border: '2px solid rgba(106,228,255,0.35)' }} />
+                            <Typography className="app-title" variant="h2" component="h1" sx={{ fontWeight: 700, letterSpacing: '0.02em' }}>
+                                Feed the Realm
+                            </Typography>
+                        </Box>
+                        <Typography variant="h5" sx={{ color: 'text.secondary', maxWidth: 760, mx: 'auto', mb: 4 }}>
+                            The ultimate MMO experience with world creation tools
+                        </Typography>
+
+                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, justifyContent: 'center', alignItems: 'center' }}>
+                            <Button
+                                variant="outlined"
                                 onClick={() => {
                                     setDownloadApp('ftr_game');
                                     setDownloadModalOpen(true);
                                 }}
-                                className="bg-[linear-gradient(135deg,rgba(245,180,74,0.9),rgba(245,180,74,0.55))] hover:brightness-105 px-6 py-3 rounded-lg text-lg font-semibold transition"
+                                sx={{
+                                    px: 4,
+                                    py: 1.6,
+                                    borderRadius: 999,
+                                    borderColor: 'rgba(245,180,74,0.55)',
+                                    color: 'var(--ember)',
+                                    bgcolor: 'rgba(20,16,24,0.72)',
+                                    '&:hover': {
+                                        borderColor: 'rgba(245,180,74,0.9)',
+                                        bgcolor: 'rgba(245,180,74,0.08)',
+                                    },
+                                }}
                             >
                                 Download Feed the Realm - Game
-                            </button>
-                        </div>
+                            </Button>
 
-                        <div>
-                            <button
+                            <Button
+                                variant="outlined"
                                 onClick={() => {
                                     setDownloadApp('ftr_world_editor');
                                     setDownloadModalOpen(true);
                                 }}
-                                className="bg-[linear-gradient(135deg,rgba(106,228,255,0.9),rgba(106,228,255,0.45))] hover:brightness-105 px-6 py-3 rounded-lg text-lg font-semibold transition"
+                                sx={{
+                                    px: 4,
+                                    py: 1.6,
+                                    borderRadius: 999,
+                                    borderColor: 'rgba(106,228,255,0.55)',
+                                    color: 'secondary.main',
+                                    bgcolor: 'rgba(20,16,24,0.72)',
+                                    '&:hover': {
+                                        borderColor: 'rgba(106,228,255,0.9)',
+                                        bgcolor: 'rgba(106,228,255,0.08)',
+                                    },
+                                }}
                             >
                                 Download Feed the Realm - World Editor
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                            </Button>
+                        </Box>
+                    </Box>
+                </Container>
+            </Box>
 
-            {/* Game Description */}
-            <section className="py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
-                <div className="container mx-auto px-4 text-center relative z-10">
-                    <div className="max-w-4xl mx-auto">
-                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
+            <Box sx={{ py: 10, position: 'relative' }}>
+                <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top, rgba(106,228,255,0.09), transparent 45%), radial-gradient(circle at bottom right, rgba(245,180,74,0.08), transparent 35%)' }} />
+                <Container maxWidth="lg" sx={{ position: 'relative' }}>
+                    <Box sx={{ textAlign: 'center', maxWidth: 900, mx: 'auto' }}>
+                        <Typography className="app-title" variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
                             Discover the Future of Gaming
-                        </h3>
-                        <p className="text-lg md:text-xl mb-10 text-gray-200 leading-relaxed">
+                        </Typography>
+                        <Typography variant="h6" color="text.secondary" sx={{ mb: 4, lineHeight: 1.8 }}>
                             {description}
-                        </p>
-                        <a
+                        </Typography>
+                        <Button
+                            component="a"
                             href={discordLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group inline-flex items-center px-8 py-4
-                                bg-gradient-to-r from-blue-600 to-purple-600
-                                hover:from-blue-700 hover:to-purple-700
-                                text-white font-extrabold text-lg
-                                rounded-full
-                                transition-all duration-300
-                                transform hover:scale-105
-                                shadow-lg hover:shadow-2xl
-                                [text-shadow:0_2px_4px_rgba(0,0,0,0.6)]"
+                            variant="outlined"
+                            endIcon={<KeyboardArrowRightRoundedIcon />}
+                            sx={{
+                                px: 4,
+                                py: 1.5,
+                                borderRadius: 999,
+                                borderColor: 'rgba(106,228,255,0.5)',
+                                color: 'secondary.main',
+                                bgcolor: 'rgba(20,16,24,0.72)',
+                                '&:hover': {
+                                    borderColor: 'rgba(245,180,74,0.85)',
+                                    color: 'var(--ember)',
+                                    bgcolor: 'rgba(245,180,74,0.08)',
+                                },
+                            }}
                         >
-                            <span className='text-white opacity-50 group-hover:opacity-100 transition-opacity'>Join Our Community</span>
-                            <svg className="ml-2 w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                        </a>
+                            Join Our Community
+                        </Button>
+                    </Box>
+                </Container>
+            </Box>
 
-                    </div>
-                </div>
-            </section>
-
-            {/* Latest Posts */}
-            <section className="py-20 bg-cover bg-center relative" style={{ backgroundImage: `url(${backgroundLower})` }}>
-                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80"></div>
-                <div className="container mx-auto px-4 relative z-10">
-                    <h3 className="text-2xl md:text-4xl font-bold text-center mb-12 text-white">Latest Posts</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Box sx={{ py: 10, position: 'relative', backgroundImage: `url(${backgroundLower})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.78), rgba(0,0,0,0.62), rgba(0,0,0,0.82))' }} />
+                <Container maxWidth="lg" sx={{ position: 'relative' }}>
+                    <Typography className="app-title" variant="h4" align="center" sx={{ fontWeight: 700, mb: 5 }}>
+                        Latest Posts
+                    </Typography>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3 }}>
                         {posts.map((post, index) => (
                             <PostCard key={index} post={post} />
                         ))}
-                    </div>
-                    <div className="text-center mt-8">
-                        <Link to="/blog" className="border border-white text-white hover:bg-white hover:text-black px-6 py-3 rounded transition">Show More</Link>
-                    </div>
-                </div>
-            </section>
+                    </Box>
+                    <Box sx={{ textAlign: 'center', mt: 5 }}>
+                        <Button
+                            component={Link}
+                            to="/blog"
+                            variant="outlined"
+                            sx={{
+                                px: 3,
+                                py: 1.2,
+                                borderRadius: 999,
+                                borderColor: 'rgba(245,180,74,0.45)',
+                                color: 'var(--ember)',
+                                bgcolor: 'rgba(20,16,24,0.72)',
+                                '&:hover': {
+                                    borderColor: 'rgba(106,228,255,0.85)',
+                                    color: 'secondary.main',
+                                    bgcolor: 'rgba(106,228,255,0.08)',
+                                },
+                            }}
+                        >
+                            Show More
+                        </Button>
+                    </Box>
+                </Container>
+            </Box>
 
-            {/* Latest Media */}
-            <section className="py-20 bg-gray-900">
-                <div className="container mx-auto px-4">
-                    <h3 className="text-2xl md:text-4xl font-bold text-center mb-12">Latest Media</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Box sx={{ py: 10, backgroundColor: 'background.default' }}>
+                <Container maxWidth="lg">
+                    <Typography className="app-title" variant="h4" align="center" sx={{ fontWeight: 700, mb: 5 }}>
+                        Latest Media
+                    </Typography>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3 }}>
                         {images.map((image, index) => (
-                            <img key={index} src={image} alt={`Media ${index}`} className="w-full h-auto" />
+                            <Paper key={index} className="app-card" sx={{ overflow: 'hidden' }}>
+                                <img src={image} alt={`Media ${index}`} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                            </Paper>
                         ))}
                         {videos.map((video, index) => (
-                            <div key={index} className="aspect-video">
+                            <Paper key={index} className="app-card" sx={{ aspectRatio: '16/9', overflow: 'hidden' }}>
                                 <iframe src={`https://www.youtube.com/embed/${video.split('v=')[1]}`} className="w-full h-full" frameBorder="0" allowFullScreen></iframe>
-                            </div>
+                            </Paper>
                         ))}
-                    </div>
-                    <div className="text-center mt-8">
-                        <Link to="/media" className="border border-white text-white hover:bg-white hover:text-black px-6 py-3 rounded transition">Show More</Link>
-                    </div>
-                </div>
-            </section>
+                    </Box>
+                    <Box sx={{ textAlign: 'center', mt: 5 }}>
+                        <Button
+                            component={Link}
+                            to="/media"
+                            variant="outlined"
+                            sx={{
+                                px: 3,
+                                py: 1.2,
+                                borderRadius: 999,
+                                borderColor: 'rgba(106,228,255,0.45)',
+                                color: 'secondary.main',
+                                bgcolor: 'rgba(20,16,24,0.72)',
+                                '&:hover': {
+                                    borderColor: 'rgba(245,180,74,0.85)',
+                                    color: 'var(--ember)',
+                                    bgcolor: 'rgba(245,180,74,0.08)',
+                                },
+                            }}
+                        >
+                            Show More
+                        </Button>
+                    </Box>
+                </Container>
+            </Box>
+
             {downloadModalOpen && (
                 <DownloadDialog open={downloadModalOpen} appName={downloadApp} onClose={() => setDownloadModalOpen(false)} />
             )}
-        </div>
+        </Box>
     );
 }
 

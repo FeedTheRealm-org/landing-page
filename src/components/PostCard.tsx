@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 interface PostCardProps {
   post: {
@@ -19,14 +22,36 @@ function PostCard({ post, className = '' }: PostCardProps) {
   };
 
   return (
-    <Link to={`/blog/${post.folder.split('/').pop()}`} className={`app-card p-4 cursor-pointer hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)] transition ${className}`}>
-      {post.thumbnail && (
-        <img src={post.thumbnail} alt={post.title} className="w-full h-40 object-cover rounded mb-4" />
-      )}
-      <h4 className="app-title text-lg md:text-xl font-bold mb-2">{post.title}</h4>
-      <p className="text-sm text-muted mb-1">By {post.author}</p>
-      <p className="text-sm text-muted">{formatDate(post.date)}</p>
-    </Link>
+    <Paper
+      component={Link}
+      to={`/blog/${post.folder.split('/').pop()}`}
+      className={className}
+      sx={{
+        p: 0,
+        overflow: 'hidden',
+        textDecoration: 'none',
+        color: 'inherit',
+        transition: 'transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease',
+        '&:hover': {
+          transform: 'translateY(-3px)',
+          boxShadow: '0 18px 40px rgba(0,0,0,0.45)',
+          borderColor: 'rgba(106,228,255,0.32)',
+        },
+      }}
+    >
+      {post.thumbnail && <img src={post.thumbnail} alt={post.title} className="w-full h-44 object-cover" />}
+      <Box sx={{ p: 2 }}>
+        <Typography className="app-title" variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+          {post.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+          By {post.author}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {formatDate(post.date)}
+        </Typography>
+      </Box>
+    </Paper>
   );
 }
 

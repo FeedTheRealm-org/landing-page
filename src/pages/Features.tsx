@@ -16,7 +16,7 @@ function Features() {
       <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
         <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700 }}>Features</Typography>
-        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 4 }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4, mt: 4 }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>MMO Game Player</Typography>
             <Typography>Play in multiple worlds, interact with players worldwide, and embark on epic adventures.</Typography>
