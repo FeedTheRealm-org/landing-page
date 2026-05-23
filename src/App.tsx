@@ -2,6 +2,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import About from './pages/About';
 import Features from './pages/Features';
@@ -12,6 +13,7 @@ import Media from './pages/Media';
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
         <Header />
         <Routes>

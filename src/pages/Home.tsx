@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
-import { getYouTubeThumbnailUrl, loadMediaImageUrls } from '../services/mediaAssets';
+import { getYouTubeEmbedUrl, loadMediaImageUrls } from '../services/mediaAssets';
 import PostCard from '../components/PostCard';
 import DownloadDialog from '../components/DownloadDialog';
 import Container from '@mui/material/Container';
@@ -13,12 +13,11 @@ import Avatar from '@mui/material/Avatar';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import ImagePopupDialog from '../components/ImagePopupDialog';
 import MediaImageThumbnail from '../components/MediaImageThumbnail';
-import MediaVideoThumbnail from '../components/MediaVideoThumbnail';
+import MediaVideoIframe from '../components/MediaVideoIframe';
 
 function Home() {
     const [posts, setPosts] = useState<any[]>([]);
     const [videos, setVideos] = useState<string[]>([]);
-    const [videoTitles, setVideoTitles] = useState<Record<string, string>>({});
     const [images, setImages] = useState<string[]>([]);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [backgroundUpper, setBackgroundUpper] = useState<string>('');
@@ -69,21 +68,6 @@ function Home() {
                 const data = yaml.load(text) as { links: string[] };
                 const videoLinks = data?.links?.slice(0, 3) ?? [];
                 setVideos(videoLinks);
-
-                const titlePairs = await Promise.all(
-                    videoLinks.map(async (videoUrl) => {
-                        try {
-                            const oembedRes = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(videoUrl)}&format=json`);
-                            if (!oembedRes.ok) return [videoUrl, ''] as const;
-                            const oembed = (await oembedRes.json()) as { title?: string };
-                            return [videoUrl, oembed.title ?? ''] as const;
-                        } catch (e) {
-                            return [videoUrl, ''] as const;
-                        }
-                    }),
-                );
-
-                setVideoTitles(Object.fromEntries(titlePairs.filter(([, title]) => Boolean(title))));
             } catch (e) {
                 // ignore
             }
@@ -284,13 +268,7 @@ function Home() {
                             item.kind === 'image' ? (
                                 <MediaImageThumbnail key={`${item.kind}-${index}`} src={item.source} alt={`Media ${index}`} onClick={() => setSelectedImage(item.source)} />
                             ) : (
-                                <MediaVideoThumbnail
-                                    key={`${item.kind}-${index}`}
-                                    href={item.source}
-                                    thumbnailSrc={getYouTubeThumbnailUrl(item.source)}
-                                    title={videoTitles[item.source] || 'YouTube Video'}
-                                    alt={`Video ${index}`}
-                                />
+                                <MediaVideoIframe key={`${item.kind}-${index}`} src={getYouTubeEmbedUrl(item.source)} title={`Video ${index}`} />
                             )
                         ))}
                     </Box>
