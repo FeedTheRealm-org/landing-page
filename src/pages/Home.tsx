@@ -2,21 +2,25 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
-import { loadMediaImageUrls } from '../services/mediaAssets';
+import { getYouTubeThumbnailUrl, loadMediaImageUrls } from '../services/mediaAssets';
 import PostCard from '../components/PostCard';
 import DownloadDialog from '../components/DownloadDialog';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
+import ImagePopupDialog from '../components/ImagePopupDialog';
+import MediaImageThumbnail from '../components/MediaImageThumbnail';
+import MediaVideoThumbnail from '../components/MediaVideoThumbnail';
 
 function Home() {
     const [posts, setPosts] = useState<any[]>([]);
     const [videos, setVideos] = useState<string[]>([]);
+    const [videoTitles, setVideoTitles] = useState<Record<string, string>>({});
     const [images, setImages] = useState<string[]>([]);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [backgroundUpper, setBackgroundUpper] = useState<string>('');
     const [backgroundLower, setBackgroundLower] = useState<string>('');
     const [downloadModalOpen, setDownloadModalOpen] = useState<boolean>(false);
@@ -63,7 +67,23 @@ function Home() {
                 if (!res.ok) return;
                 const text = await res.text();
                 const data = yaml.load(text) as { links: string[] };
-                setVideos(data?.links?.slice(0, 3) ?? []);
+                const videoLinks = data?.links?.slice(0, 3) ?? [];
+                setVideos(videoLinks);
+
+                const titlePairs = await Promise.all(
+                    videoLinks.map(async (videoUrl) => {
+                        try {
+                            const oembedRes = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(videoUrl)}&format=json`);
+                            if (!oembedRes.ok) return [videoUrl, ''] as const;
+                            const oembed = (await oembedRes.json()) as { title?: string };
+                            return [videoUrl, oembed.title ?? ''] as const;
+                        } catch (e) {
+                            return [videoUrl, ''] as const;
+                        }
+                    }),
+                );
+
+                setVideoTitles(Object.fromEntries(titlePairs.filter(([, title]) => Boolean(title))));
             } catch (e) {
                 // ignore
             }
@@ -238,13 +258,13 @@ function Home() {
                                 px: 3,
                                 py: 1.2,
                                 borderRadius: 999,
-                                borderColor: 'rgba(245,180,74,0.45)',
-                                color: 'var(--ember)',
+                                borderColor: 'rgba(106,228,255,0.45)',
+                                color: 'secondary.main',
                                 bgcolor: 'rgba(20,16,24,0.72)',
                                 '&:hover': {
-                                    borderColor: 'rgba(106,228,255,0.85)',
-                                    color: 'secondary.main',
-                                    bgcolor: 'rgba(106,228,255,0.08)',
+                                    borderColor: 'rgba(245,180,74,0.85)',
+                                    color: 'var(--ember)',
+                                    bgcolor: 'rgba(245,180,74,0.08)',
                                 },
                             }}
                         >
@@ -259,16 +279,19 @@ function Home() {
                     <Typography className="app-title" variant="h4" align="center" sx={{ fontWeight: 700, mb: 5 }}>
                         Latest Media
                     </Typography>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3 }}>
-                        {images.map((image, index) => (
-                            <Paper key={index} className="app-card" sx={{ overflow: 'hidden' }}>
-                                <img src={image} alt={`Media ${index}`} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                            </Paper>
-                        ))}
-                        {videos.map((video, index) => (
-                            <Paper key={index} className="app-card" sx={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-                                <iframe src={`https://www.youtube.com/embed/${video.split('v=')[1]}`} className="w-full h-full" frameBorder="0" allowFullScreen></iframe>
-                            </Paper>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>
+                        {[...images.map((image) => ({ kind: 'image' as const, source: image })), ...videos.map((video) => ({ kind: 'video' as const, source: video }))].map((item, index) => (
+                            item.kind === 'image' ? (
+                                <MediaImageThumbnail key={`${item.kind}-${index}`} src={item.source} alt={`Media ${index}`} onClick={() => setSelectedImage(item.source)} />
+                            ) : (
+                                <MediaVideoThumbnail
+                                    key={`${item.kind}-${index}`}
+                                    href={item.source}
+                                    thumbnailSrc={getYouTubeThumbnailUrl(item.source)}
+                                    title={videoTitles[item.source] || 'YouTube Video'}
+                                    alt={`Video ${index}`}
+                                />
+                            )
                         ))}
                     </Box>
                     <Box sx={{ textAlign: 'center', mt: 5 }}>
@@ -295,6 +318,8 @@ function Home() {
                     </Box>
                 </Container>
             </Box>
+
+            <ImagePopupDialog open={Boolean(selectedImage)} imageSrc={selectedImage} alt="Expanded media" onClose={() => setSelectedImage(null)} />
 
             {downloadModalOpen && (
                 <DownloadDialog open={downloadModalOpen} appName={downloadApp} onClose={() => setDownloadModalOpen(false)} />

@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
-import { loadMediaImageUrls } from '../services/mediaAssets';
+import { getYouTubeEmbedUrl, loadMediaImageUrls } from '../services/mediaAssets';
+import ImagePopupDialog from '../components/ImagePopupDialog';
+import MediaImageThumbnail from '../components/MediaImageThumbnail';
+import MediaVideoIframe from '../components/MediaVideoIframe';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 
 function Media() {
     const [videos, setVideos] = useState<string[]>([]);
     const [images, setImages] = useState<string[]>([]);
     const [background, setBackground] = useState<string>('');
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     useEffect(() => {
         const loadVideos = async () => {
@@ -43,11 +46,14 @@ function Media() {
                 {images.length > 0 && (
                     <Box sx={{ mb: 6 }}>
                         <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>Pictures</Typography>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 2 }}>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>
                             {images.map((image, index) => (
-                                <Paper key={index} sx={{ overflow: 'hidden' }}>
-                                    <img src={image} alt={`Media ${index}`} className="w-full h-auto" />
-                                </Paper>
+                                <MediaImageThumbnail
+                                    key={index}
+                                    src={image}
+                                    alt={`Media ${index}`}
+                                    onClick={() => setSelectedImage(image)}
+                                />
                             ))}
                         </Box>
                     </Box>
@@ -56,16 +62,16 @@ function Media() {
                 {videos.length > 0 && (
                     <Box sx={{ mb: 6 }}>
                         <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>Videos</Typography>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 2 }}>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>
                             {videos.map((video, index) => (
-                                <Paper key={index} sx={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-                                    <iframe src={`https://www.youtube.com/embed/${video.split('v=')[1]}`} className="w-full h-full" frameBorder="0" allowFullScreen></iframe>
-                                </Paper>
+                                <MediaVideoIframe key={index} src={getYouTubeEmbedUrl(video)} title={`Video ${index}`} />
                             ))}
                         </Box>
                     </Box>
                 )}
             </Container>
+
+            <ImagePopupDialog open={Boolean(selectedImage)} imageSrc={selectedImage} alt="Expanded media" onClose={() => setSelectedImage(null)} />
         </Box>
     );
 }
