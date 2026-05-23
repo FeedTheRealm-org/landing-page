@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
+import { loadMediaImageUrls } from '../services/mediaAssets';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -24,22 +25,12 @@ function Media() {
             }
         };
 
-        const loadImages = async () => {
-            const imageModules = import.meta.glob('/data/media-page/imgs/*', { query: '?url', import: 'default' });
-            const imageList: string[] = [];
-            for (const path in imageModules) {
-                const url = await imageModules[path]() as string;
-                imageList.push(url);
-            }
-            setImages(imageList);
-        };
-
         const loadBackground = async () => {
             setBackground(`${dataBasePath}/media-page/background.jpg`);
         };
 
         loadVideos();
-        loadImages();
+        loadMediaImageUrls().then((imageList) => setImages(imageList));
         loadBackground();
     }, []);
 

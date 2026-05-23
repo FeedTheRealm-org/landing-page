@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
+import { loadMediaImageUrls } from '../services/mediaAssets';
 import PostCard from '../components/PostCard';
 import DownloadDialog from '../components/DownloadDialog';
 import Container from '@mui/material/Container';
@@ -68,17 +69,6 @@ function Home() {
             }
         };
 
-        // Load images
-        const loadImages = async () => {
-            const imageModules = import.meta.glob('/data/media-page/imgs/*', { query: '?url', import: 'default' });
-            const imageList: string[] = [];
-            for (const path in imageModules) {
-                const url = await imageModules[path]() as string;
-                imageList.push(url);
-            }
-            setImages(imageList.slice(0, 3)); // Latest 3
-        };
-
         // Load background image
         // const loadBackground = async () => {
         //   try {
@@ -111,7 +101,7 @@ function Home() {
 
         loadPosts();
         loadVideos();
-        loadImages();
+        loadMediaImageUrls().then((imageList) => setImages(imageList.slice(0, 3)));
         loadBackgrounds();
         loadMetadata();
     }, []);
