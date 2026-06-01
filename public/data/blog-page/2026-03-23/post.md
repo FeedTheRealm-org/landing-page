@@ -1,4 +1,4 @@
-# Gem Store are here
+# Gem Store is here
 
 One of the most requested features is finally live: players can now purchase gems directly from inside the game. This update brings a full in-game store, a Stripe-powered checkout flow, and real-time purchase feedback — all wired together end to end.
 
