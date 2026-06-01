@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FaYoutube, FaDiscord, FaTwitter, FaGlobe } from 'react-icons/fa';
+import { FaYoutube, FaDiscord, FaGlobe } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
 import Typography from '@mui/material/Typography';
@@ -31,8 +32,8 @@ function Footer() {
         return <FaYoutube className="w-5 h-5" />;
       case 'discord':
         return <FaDiscord className="w-5 h-5" />;
-      case 'twitter':
-        return <FaTwitter className="w-5 h-5" />;
+      case 'x':
+        return <FaXTwitter className="w-5 h-5" />;
       case 'bluesky':
         return <FaGlobe className="w-5 h-5" />;
       default:

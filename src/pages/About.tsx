@@ -22,7 +22,7 @@ function About() {
         const res = await fetch(`${dataBasePath}/about-page/team/team.yaml`);
         if (!res.ok) return;
         const text = await res.text();
-        const teamData = yaml.load(text) as { members: Record<string, { name: string; position: string }> };
+        const teamData = yaml.load(text) as { members: Record<string, { name: string; position: string; comments?: string }> };
 
         const imageModules = import.meta.glob('/data/about-page/team/imgs/*.jpg', { query: '?url', import: 'default' });
         const members = [];
@@ -90,6 +90,14 @@ function About() {
                 <Avatar src={member.image} alt={member.name} sx={{ width: 96, height: 96, mx: 'auto', mb: 2 }} />
                 <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{member.name}</Typography>
                 <Typography variant="body2" color="text.secondary">{member.position}</Typography>
+                {member.comments ? (
+                  <Typography
+                    variant="body2"
+                    sx={{ mt: 1, whiteSpace: 'pre-line', color: 'text.secondary', textAlign: 'left' }}
+                  >
+                    {member.comments}
+                  </Typography>
+                ) : null}
               </Paper>
             ))}
           </Box>

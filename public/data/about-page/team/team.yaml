@@ -2,13 +2,21 @@ members:
   "1":
     name: "Agustin Barbalase"
     position: "Developer"
+    comments: >
+      I believe Feed The Realm allowed me to significantly enhance my game development, teamwork, and management skills, while also deepening my knowledge in backend development and CI/CD practices.
   "2":
     name: "Maximo Utrera"
     position: "Developer"
+    comments: >
+      Working on FTR has been a blast! Both from the development and teamwork perspectives. I'm very excited for the road ahead,
+      and grateful to everyone who supported the project from idea to MVP! 🩵
   "3":
     name: "Nicolas Sanchez"
     position: "Developer"
+    comments: >
+      This game has infinite options to be able to enjoy it. Was made with hard teamwork, love and dedication, for everyone.
   "4":
     name: "Santiago Sevitz"
     position: "Developer"
-
+    comments: >
+      FTR was an incredible opportunity to learn Unity development, contribute to building a real product, and grow as a developer. None of it would have been possible without the amazing team that supported me every step of the way.
