@@ -40,13 +40,13 @@ function Media() {
     return (
         <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
             <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
-            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
-                <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700, color: 'text.primary' }}>Media</Typography>
+            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: { xs: 6, md: 8 } }}>
+                <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700, color: 'text.primary', fontSize: { xs: '2.1rem', sm: '2.6rem', md: '3rem' } }}>Media</Typography>
 
                 {images.length > 0 && (
                     <Box sx={{ mb: 6 }}>
-                        <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>Pictures</Typography>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>
+                        <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' } }}>Pictures</Typography>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: { xs: 2.5, md: 3 } }}>
                             {images.map((image, index) => (
                                 <MediaImageThumbnail
                                     key={index}
@@ -61,8 +61,8 @@ function Media() {
 
                 {videos.length > 0 && (
                     <Box sx={{ mb: 6 }}>
-                        <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>Videos</Typography>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>
+                        <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' } }}>Videos</Typography>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: { xs: 2.5, md: 3 } }}>
                             {videos.map((video, index) => (
                                 <MediaVideoIframe key={index} src={getYouTubeEmbedUrl(video)} title={`Video ${index}`} />
                             ))}

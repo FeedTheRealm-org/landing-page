@@ -124,19 +124,24 @@ function Home() {
                 }}
             >
                 <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.76), rgba(0,0,0,0.58), rgba(0,0,0,0.78))' }} />
-                <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: 8 }}>
+                <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: { xs: 6, md: 8 } }}>
                     <Box sx={{ textAlign: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-                            <Avatar src="/logo.jpg" alt="Feed the Realm Logo" sx={{ width: 72, height: 72, border: '2px solid rgba(106,228,255,0.35)' }} />
-                            <Typography className="app-title" variant="h2" component="h1" sx={{ fontWeight: 700, letterSpacing: '0.02em' }}>
+                            <Avatar src="/logo.jpg" alt="Feed the Realm Logo" sx={{ width: { xs: 56, sm: 72 }, height: { xs: 56, sm: 72 }, border: '2px solid rgba(106,228,255,0.35)' }} />
+                            <Typography
+                                className="app-title"
+                                variant="h2"
+                                component="h1"
+                                sx={{ fontWeight: 700, letterSpacing: '0.02em', fontSize: { xs: '2.2rem', sm: '3rem', md: '3.75rem' } }}
+                            >
                                 Feed the Realm
                             </Typography>
                         </Box>
-                        <Typography variant="h5" sx={{ color: 'text.secondary', maxWidth: 760, mx: 'auto', mb: 4 }}>
+                        <Typography variant="h5" sx={{ color: 'text.secondary', maxWidth: 760, mx: 'auto', mb: 4, fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' } }}>
                             The ultimate MMO experience with world creation tools
                         </Typography>
 
-                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, justifyContent: 'center', alignItems: 'center' }}>
+                        <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: { sm: 'row' }, gap: 2, justifyContent: 'center', alignItems: 'center' }}>
                             <Button
                                 variant="outlined"
                                 onClick={() => {
@@ -144,12 +149,15 @@ function Home() {
                                     setDownloadModalOpen(true);
                                 }}
                                 sx={{
+                                    width: { xs: '100%', sm: 'auto' },
+                                    maxWidth: { xs: 360, sm: 'none' },
                                     px: 4,
                                     py: 1.6,
                                     borderRadius: 999,
                                     borderColor: 'rgba(245,180,74,0.55)',
                                     color: 'var(--ember)',
                                     bgcolor: 'rgba(20,16,24,0.72)',
+                                    fontSize: { xs: '0.95rem', sm: '1rem' },
                                     '&:hover': {
                                         borderColor: 'rgba(245,180,74,0.9)',
                                         bgcolor: 'rgba(245,180,74,0.08)',
@@ -166,12 +174,15 @@ function Home() {
                                     setDownloadModalOpen(true);
                                 }}
                                 sx={{
+                                    width: { xs: '100%', sm: 'auto' },
+                                    maxWidth: { xs: 360, sm: 'none' },
                                     px: 4,
                                     py: 1.6,
                                     borderRadius: 999,
                                     borderColor: 'rgba(106,228,255,0.55)',
                                     color: 'secondary.main',
                                     bgcolor: 'rgba(20,16,24,0.72)',
+                                    fontSize: { xs: '0.95rem', sm: '1rem' },
                                     '&:hover': {
                                         borderColor: 'rgba(106,228,255,0.9)',
                                         bgcolor: 'rgba(106,228,255,0.08)',
@@ -185,14 +196,14 @@ function Home() {
                 </Container>
             </Box>
 
-            <Box sx={{ py: 10, position: 'relative' }}>
+            <Box sx={{ py: { xs: 8, md: 10 }, position: 'relative' }}>
                 <Box sx={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top, rgba(106,228,255,0.09), transparent 45%), radial-gradient(circle at bottom right, rgba(245,180,74,0.08), transparent 35%)' }} />
                 <Container maxWidth="lg" sx={{ position: 'relative' }}>
                     <Box sx={{ textAlign: 'center', maxWidth: 900, mx: 'auto' }}>
-                        <Typography className="app-title" variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
+                        <Typography className="app-title" variant="h4" sx={{ fontWeight: 700, mb: 2, fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' } }}>
                             Discover the Future of Gaming
                         </Typography>
-                        <Typography variant="h6" color="text.secondary" sx={{ mb: 4, lineHeight: 1.8 }}>
+                        <Typography variant="h6" color="text.secondary" sx={{ mb: 4, lineHeight: 1.8, fontSize: { xs: '1rem', sm: '1.15rem', md: '1.25rem' } }}>
                             {description}
                         </Typography>
                         <Button
@@ -222,10 +233,10 @@ function Home() {
                 </Container>
             </Box>
 
-            <Box sx={{ py: 10, position: 'relative', backgroundImage: `url(${backgroundLower})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+            <Box sx={{ py: { xs: 8, md: 10 }, position: 'relative', backgroundImage: `url(${backgroundLower})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.78), rgba(0,0,0,0.62), rgba(0,0,0,0.82))' }} />
                 <Container maxWidth="lg" sx={{ position: 'relative' }}>
-                    <Typography className="app-title" variant="h4" align="center" sx={{ fontWeight: 700, mb: 5 }}>
+                    <Typography className="app-title" variant="h4" align="center" sx={{ fontWeight: 700, mb: 5, fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' } }}>
                         Latest Posts
                     </Typography>
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3 }}>
@@ -258,9 +269,9 @@ function Home() {
                 </Container>
             </Box>
 
-            <Box sx={{ py: 10, backgroundColor: 'background.default' }}>
+            <Box sx={{ py: { xs: 8, md: 10 }, backgroundColor: 'background.default' }}>
                 <Container maxWidth="lg">
-                    <Typography className="app-title" variant="h4" align="center" sx={{ fontWeight: 700, mb: 5 }}>
+                    <Typography className="app-title" variant="h4" align="center" sx={{ fontWeight: 700, mb: 5, fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' } }}>
                         Latest Media
                     </Typography>
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>

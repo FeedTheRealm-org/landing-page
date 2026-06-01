@@ -39,7 +39,14 @@ function PostCard({ post, className = '' }: PostCardProps) {
         },
       }}
     >
-      {post.thumbnail && <img src={post.thumbnail} alt={post.title} className="w-full h-44 object-cover" />}
+      {post.thumbnail && (
+        <Box
+          component="img"
+          src={post.thumbnail}
+          alt={post.title}
+          sx={{ width: '100%', height: { xs: 180, sm: 200 }, objectFit: 'cover', display: 'block' }}
+        />
+      )}
       <Box sx={{ p: 2 }}>
         <Typography className="app-title" variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
           {post.title}

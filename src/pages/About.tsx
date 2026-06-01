@@ -74,20 +74,20 @@ function About() {
   return (
     <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
       <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
-        <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700 }}>About Feed the Realm</Typography>
-        <Typography align="center" sx={{ maxWidth: '64ch', mx: 'auto', mb: 6 }}>{description}</Typography>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: { xs: 6, md: 8 } }}>
+        <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '2.1rem', sm: '2.6rem', md: '3rem' } }}>About Feed the Realm</Typography>
+        <Typography align="center" sx={{ maxWidth: '64ch', mx: 'auto', mb: { xs: 4, md: 6 } }}>{description}</Typography>
 
         <Box sx={{ mt: 6 }}>
-          <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>Meet the Team</Typography>
+          <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700, fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' } }}>Meet the Team</Typography>
           <Typography align="center" sx={{ maxWidth: '72ch', mx: 'auto', mb: 4, color: 'text.secondary' }}>
             Feed the Realm was born from our team's final university project, and we're passionately developing it with cutting-edge technology, innovative gameplay mechanics, and a vision to revolutionize the MMO landscape. Our dedicated developers bring fresh perspectives and boundless creativity to create an unparalleled gaming experience.
           </Typography>
 
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 3 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: { xs: 2.5, md: 3 } }}>
             {teamMembers.map((member, index) => (
               <Paper key={index} sx={{ textAlign: 'center', p: 2, bgcolor: 'transparent' }}>
-                <Avatar src={member.image} alt={member.name} sx={{ width: 96, height: 96, mx: 'auto', mb: 2 }} />
+                <Avatar src={member.image} alt={member.name} sx={{ width: { xs: 84, sm: 96 }, height: { xs: 84, sm: 96 }, mx: 'auto', mb: 2 }} />
                 <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{member.name}</Typography>
                 <Typography variant="body2" color="text.secondary">{member.position}</Typography>
                 {member.comments ? (

@@ -53,9 +53,16 @@ function Blog() {
     return (
         <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
             <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
-            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
-                <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 700 }}>Blog</Typography>
-                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: 4 }}>
+            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: { xs: 6, md: 8 } }}>
+                <Typography
+                    variant="h3"
+                    align="center"
+                    gutterBottom
+                    sx={{ fontWeight: 700, fontSize: { xs: '2.1rem', sm: '2.6rem', md: '3rem' } }}
+                >
+                    Blog
+                </Typography>
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: { xs: 3, md: 4 } }}>
                     {posts.map((post, index) => (
                         <PostCard key={index} post={post} />
                     ))}

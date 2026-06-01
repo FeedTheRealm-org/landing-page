@@ -97,19 +97,50 @@ function BlogPost() {
   return (
     <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
       <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: 8 }}>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: { xs: 6, md: 8 } }}>
         <Box sx={{ maxWidth: 900, mx: 'auto' }}>
-          <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>{post.title}</Typography>
-          <Box sx={{ display: 'flex', gap: 2, mb: 3, color: 'text.secondary' }}>
+          <Typography
+            variant="h3"
+            component="h1"
+            gutterBottom
+            sx={{ fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } }}
+          >
+            {post.title}
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, mb: 3, color: 'text.secondary', flexWrap: 'wrap', fontSize: { xs: '0.95rem', sm: '1rem' } }}>
             <span>By {post.author}</span>
             <span>{formatDate(post.date)}</span>
           </Box>
-          <Paper sx={{ p: 4, bgcolor: 'rgba(20,16,24,0.6)' }}>
+          <Paper sx={{ p: { xs: 2, sm: 3, md: 4 }, bgcolor: 'rgba(20,16,24,0.6)' }}>
             <ReactMarkdown
               components={{
-                h1: ({ children }) => <Typography variant="h4" component="h2" sx={{ fontWeight: 700, mt: 3, mb: 2 }}>{children}</Typography>,
-                h2: ({ children }) => <Typography variant="h5" component="h3" sx={{ fontWeight: 700, mt: 4, mb: 1.5 }}>{children}</Typography>,
-                h3: ({ children }) => <Typography variant="h6" component="h4" sx={{ fontWeight: 700, mt: 3, mb: 1 }}>{children}</Typography>,
+                h1: ({ children }) => (
+                  <Typography
+                    variant="h4"
+                    component="h2"
+                    sx={{ fontWeight: 700, mt: 3, mb: 2, fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' } }}
+                  >
+                    {children}
+                  </Typography>
+                ),
+                h2: ({ children }) => (
+                  <Typography
+                    variant="h5"
+                    component="h3"
+                    sx={{ fontWeight: 700, mt: 4, mb: 1.5, fontSize: { xs: '1.3rem', sm: '1.5rem', md: '1.75rem' } }}
+                  >
+                    {children}
+                  </Typography>
+                ),
+                h3: ({ children }) => (
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    sx={{ fontWeight: 700, mt: 3, mb: 1, fontSize: { xs: '1.1rem', sm: '1.2rem', md: '1.3rem' } }}
+                  >
+                    {children}
+                  </Typography>
+                ),
                 p: ({ children }) => <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2, lineHeight: 1.8 }}>{children}</Typography>,
                 ul: ({ children }) => <Box component="ul" sx={{ pl: 3, mb: 2, color: 'text.secondary' }}>{children}</Box>,
                 ol: ({ children }) => <Box component="ol" sx={{ pl: 3, mb: 2, color: 'text.secondary' }}>{children}</Box>,
