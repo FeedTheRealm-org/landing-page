@@ -99,8 +99,12 @@ function BlogPost() {
       sx={{
         minHeight: '100vh',
         position: 'relative',
-        backgroundImage:
-          'radial-gradient(circle at top left, rgba(106, 228, 255, 0.12), transparent 40%), radial-gradient(circle at 80% 0%, rgba(245, 180, 74, 0.12), transparent 35%), linear-gradient(160deg, rgba(12, 10, 20, 0.98), rgba(8, 7, 12, 0.98))',
+        backgroundImage: background
+          ? `radial-gradient(circle at top left, rgba(106, 228, 255, 0.12), transparent 40%), radial-gradient(circle at 80% 0%, rgba(245, 180, 74, 0.12), transparent 35%), linear-gradient(160deg, rgba(12, 10, 20, 0.88), rgba(8, 7, 12, 0.9)), url(${background})`
+          : 'radial-gradient(circle at top left, rgba(106, 228, 255, 0.12), transparent 40%), radial-gradient(circle at 80% 0%, rgba(245, 180, 74, 0.12), transparent 35%), linear-gradient(160deg, rgba(12, 10, 20, 0.98), rgba(8, 7, 12, 0.98))',
+        backgroundSize: background ? 'cover' : undefined,
+        backgroundPosition: background ? 'center' : undefined,
+        backgroundRepeat: background ? 'no-repeat' : undefined,
       }}
     >
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: { xs: 6, md: 8 } }}>

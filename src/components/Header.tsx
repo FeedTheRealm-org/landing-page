@@ -87,12 +87,14 @@ function Header() {
         anchor="right"
         open={mobileOpen}
         onClose={toggleDrawer(false)}
-        PaperProps={{
-          sx: {
-            width: 280,
-            bgcolor: 'rgba(14,12,20,0.98)',
-            borderLeft: '1px solid rgba(106,228,255,0.16)',
-            pt: 2,
+        slotProps={{
+          paper: {
+            sx: {
+              width: 280,
+              bgcolor: 'rgba(14,12,20,0.98)',
+              borderLeft: '1px solid rgba(106,228,255,0.16)',
+              pt: 2,
+            },
           },
         }}
       >
