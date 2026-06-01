@@ -95,8 +95,14 @@ function BlogPost() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
-      <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.6))' }} />
+    <Box
+      sx={{
+        minHeight: '100vh',
+        position: 'relative',
+        backgroundImage:
+          'radial-gradient(circle at top left, rgba(106, 228, 255, 0.12), transparent 40%), radial-gradient(circle at 80% 0%, rgba(245, 180, 74, 0.12), transparent 35%), linear-gradient(160deg, rgba(12, 10, 20, 0.98), rgba(8, 7, 12, 0.98))',
+      }}
+    >
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: { xs: 6, md: 8 } }}>
         <Box sx={{ maxWidth: 900, mx: 'auto' }}>
           <Typography
