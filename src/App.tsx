@@ -9,6 +9,7 @@ import Features from './pages/Features';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Media from './pages/Media';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:date" element={<BlogPost />} />
           <Route path="/media" element={<Media />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Routes>
         <Footer />
       </Box>

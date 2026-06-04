@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaYoutube, FaDiscord, FaGlobe } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import { Link as RouterLink } from 'react-router-dom';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
 import Typography from '@mui/material/Typography';
@@ -92,6 +93,13 @@ function Footer() {
           <Box sx={{ textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.04)', pt: 3 }}>
             <Typography variant="body2" color="text.secondary">&copy; 2026 Feed the Realm. All rights reserved.</Typography>
             <Typography variant="caption" color="text.secondary">Crafting worlds, building communities, revolutionizing gaming.</Typography>
+            <Box sx={{ mt: 1 }}>
+              <RouterLink to="/privacy-policy" style={{ textDecoration: 'none' }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary', cursor: 'pointer', '&:hover': { color: 'secondary.main' } }}>
+                  Privacy Policy
+                </Typography>
+              </RouterLink>
+            </Box>
           </Box>
         </Box>
       </Box>

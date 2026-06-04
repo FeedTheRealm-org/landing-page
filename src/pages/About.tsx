@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import yaml from 'js-yaml';
 import { dataBasePath } from '../services/config';
 import Container from '@mui/material/Container';
@@ -6,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
 function About() {
   const [background, setBackground] = useState<string>('');
@@ -100,6 +102,28 @@ function About() {
                 ) : null}
               </Paper>
             ))}
+          </Box>
+          <Box sx={{ textAlign: 'center', mt: 6 }}>
+            <Button
+              component={Link}
+              to="/privacy-policy"
+              variant="outlined"
+              sx={{
+                px: 3,
+                py: 1.2,
+                borderRadius: 999,
+                borderColor: 'rgba(106,228,255,0.45)',
+                color: 'secondary.main',
+                bgcolor: 'rgba(20,16,24,0.72)',
+                '&:hover': {
+                  borderColor: 'rgba(245,180,74,0.85)',
+                  color: 'var(--ember)',
+                  bgcolor: 'rgba(245,180,74,0.08)',
+                },
+              }}
+            >
+              Privacy Policy
+            </Button>
           </Box>
         </Box>
       </Container>
