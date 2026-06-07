@@ -9,7 +9,6 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded';
 import ImagePopupDialog from '../components/ImagePopupDialog';
 import MediaImageThumbnail from '../components/MediaImageThumbnail';
@@ -127,15 +126,16 @@ function Home() {
                 <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: { xs: 6, md: 8 } }}>
                     <Box sx={{ textAlign: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-                            <Avatar src="/logo.jpg" alt="Feed the Realm Logo" sx={{ width: { xs: 56, sm: 72 }, height: { xs: 56, sm: 72 }, border: '2px solid rgba(106,228,255,0.35)' }} />
-                            <Typography
-                                className="app-title"
-                                variant="h2"
-                                component="h1"
-                                sx={{ fontWeight: 700, letterSpacing: '0.02em', fontSize: { xs: '2.2rem', sm: '3rem', md: '3.75rem' } }}
-                            >
-                                Feed the Realm
-                            </Typography>
+                            <Box
+                                component="img"
+                                src="/logo-text.png"
+                                alt="Feed the Realm"
+                                sx={{
+                                    height: { xs: '7rem', sm: '8rem', md: '10rem' },
+                                    width: 'auto',
+                                    objectFit: 'contain',
+                                }}
+                            />
                         </Box>
                         <Typography variant="h5" sx={{ color: 'text.secondary', maxWidth: 760, mx: 'auto', mb: 4, fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' } }}>
                             The ultimate MMO experience with world creation tools
