@@ -1,8 +1,8 @@
-# World Editor is now in BETA
+# World Editor is now in ALPHA
 
 Hello everyone!
 
-We're excited to share that the World Editor is now in BETA! This means that players can now access the World Editor and create their own custom worlds. We can't wait to see what amazing creations our community will come up with!
+We're excited to share that the World Editor is now in ALPHA! This means that players can now access the World Editor and create their own custom worlds. We can't wait to see what amazing creations our community will come up with!
 
 Recently we did a UI Overhaul due to user feedback and due to some responsiveness issues. Something really cool that we 
 kept noticing throught the development of it was the fact that, it's actually looking like an actual game!
