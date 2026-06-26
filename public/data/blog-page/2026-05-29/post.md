@@ -1,16 +1,21 @@
-# Quest Progression Update
+# Game UI Overhaul
 
-Hellooo!
+Hello everyone!
 
-Don't forget ¡WORLD CREATORS! to make your world very very progressive by creating a lot of quests making all your player fans spend more time in your world.
+We wanted to let you all know that we have been working hard on enhancing the UI of the entire game in response to some comments/critics that alpha testers gave us and for which we are thankful. We called this process the UI overhaul.
 
-Don't be shy and start creating multiple quests, even now the players can accept many quest at the same time and track or untrack the quests they want.
+In this post we will focus on the gameplay side of Feed the Realm, so the world editor will be covered in another post.
 
-Forget the placeholders that I used as NPC names or quests, you have to be more creative than that!
+We started by selecting the best UI pieces that we considered were worth keeping, such as the style of the character creator and gem store page, and from there we extrapolated that style to all the rest of UI elements.
+Additionally we had some components made by an artist such as the inventory and fast access slots which fit perfectly with the new look we wanted to achieve.
 
-Make your world UNFORGETABLE!
+The work we put in resulted in the following before/after comparisons:
 
-### Screenshot for dev testing for quests progression
+![home](./imgs/home.jpg)
+![settings](./imgs/settings.jpg)
+![ingame](./imgs/ingame.jpg)
 
-![thumbnail](./imgs/thumbnail.jpg)
+These are just some examples of the changes we made, in follow up posts you will be able to take a look at more additions or enhancements!
+
+Stay tuned for more updates!
 
