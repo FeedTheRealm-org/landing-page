@@ -46,7 +46,7 @@ We're also hosting a live playtesting session with the developers, where you'll 
 
 If you're looking for a fun Sunday activity or simply want to help shape the future of Feed the Realm, we'd love to have you with us!
 
-**📅 Sunday June 28th - 13:00 (UTC-3)**
+**📅 Saturday July 4th - 18:00 (UTC-3)**
 
 Join us on Discord via [this link](https://discord.com/invite/sQ9uwjQKwX)
 
